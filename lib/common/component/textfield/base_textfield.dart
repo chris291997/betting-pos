@@ -1,5 +1,6 @@
 import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class BaseTextfield extends StatelessWidget {
   const BaseTextfield({
@@ -10,6 +11,8 @@ class BaseTextfield extends StatelessWidget {
     this.labelText,
     this.hintText,
     this.obscureText = false,
+    this.inputFormatters,
+    this.keyboardType,
     super.key,
   });
 
@@ -19,6 +22,8 @@ class BaseTextfield extends StatelessWidget {
   final String? labelText;
   final String? hintText;
   final bool obscureText;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   final void Function(String) onChanged;
 
@@ -65,6 +70,8 @@ class BaseTextfield extends StatelessWidget {
         ),
       ),
       obscureText: obscureText,
+      inputFormatters: inputFormatters,
+      keyboardType: keyboardType,
     );
   }
 }

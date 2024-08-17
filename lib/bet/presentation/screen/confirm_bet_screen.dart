@@ -1,17 +1,13 @@
 import 'package:bet_pos/bet/presentation/component/bet_next_step_button.dart';
 import 'package:bet_pos/bet/presentation/component/bet_payment_details.dart';
+import 'package:bet_pos/bet/presentation/component/betted_fighter.dart';
 import 'package:bet_pos/bet/presentation/component/payment_option.dart';
-import 'package:bet_pos/bet/presentation/component/select_bet_card.dart';
-import 'package:bet_pos/fighter/data/di/fighter_service_locator.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmBetScreen extends StatelessWidget {
   const ConfirmBetScreen({
     super.key,
-    required this.selectedFighterType,
   });
-
-  final FighterType selectedFighterType;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +20,7 @@ class ConfirmBetScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SelectBetCard(
-                  fighterOutput: FighterOutput.empty,
-                  fighterType: selectedFighterType,
-                  isSelected: true,
-                  onTap: () {}),
+              const BettedFighterCard(),
               const SizedBox(
                 height: 30,
               ),

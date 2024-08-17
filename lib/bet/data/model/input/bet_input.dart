@@ -54,6 +54,16 @@ class BetInput extends Equatable {
     return json.values.any((value) => value == '' || value == 0);
   }
 
+  FighterType? get fighterType {
+    if (betOn.id == fight.walaId) {
+      return FighterType.wala;
+    } else if (betOn.id == fight.meronId) {
+      return FighterType.meron;
+    }
+
+    return null;
+  }
+
   @override
   List<Object> get props => [
         betAmount,

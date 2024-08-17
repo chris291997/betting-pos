@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:bet_pos/authentication/presentation/viewmodel/auth_viewmodel.dart';
-import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
 import 'package:bet_pos/common/di/service_locator.dart';
 import 'package:bet_pos/common/theme/theme.dart';
@@ -28,10 +26,7 @@ class LoginButton extends StatelessWidget {
 
               final user = await cacheService.read(StorageKey.loggedUser);
 
-              print('user: $user');
-
               final userOutput = UserOutput.fromJson(jsonDecode(user ?? ''));
-              print('userOutput: $userOutput');
 
               accountBloc.add(AccountEventUserSet(userOutput));
 

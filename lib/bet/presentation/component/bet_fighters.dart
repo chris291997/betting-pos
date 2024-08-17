@@ -74,7 +74,6 @@ class _FighterCard extends StatelessWidget {
                   fighterType: fighterType,
                   isSelected: betState.input.betOn.id == fighter.id,
                   onTap: () {
-                    print('Fighter selected: ${fighter.name}');
                     context.read<BetBloc>().add(
                           BetFighterSelected(fighter),
                         );
