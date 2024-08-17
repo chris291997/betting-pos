@@ -51,6 +51,7 @@ dependencies:
   super_tooltip: ^2.0.8
   dropdown_button2: ^2.3.9
   gradient_borders: ^1.0.1
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

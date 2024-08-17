@@ -8,9 +8,15 @@ part '../state/account_state.dart';
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
   AccountBloc(this._userRepository) : super(const AccountState()) {
     on<AccountEventLoggedUserRequested>(_onAccountEventLoggedUserRequested);
+    on<AccountEventUserSet>(_onAccountEventUserSet);
   }
 
   final UserRepository _userRepository;
+
+  void _onAccountEventUserSet(
+      AccountEventUserSet event, Emitter<AccountState> emit) {
+    emit(state.copyWith(userOutput: event.user));
+  }
 
   void _onAccountEventLoggedUserRequested(
       AccountEventLoggedUserRequested event, Emitter<AccountState> emit) async {

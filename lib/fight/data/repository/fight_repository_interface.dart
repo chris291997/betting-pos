@@ -11,5 +11,6 @@ abstract interface class FightRepositoryInterface {
       {required String eventId,
       required String fightId,
       required UpdateFightInput input});
+
   Future<List<FightOutput>> getFights({required String eventId});
 }

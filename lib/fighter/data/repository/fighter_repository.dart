@@ -28,4 +28,9 @@ class FighterRepository implements FighterRepositoryInterface {
   Future<List<FighterOutput>> getFighters() async {
     return _remoteSource.getFighters();
   }
+
+  @override
+  Future<FighterOutput> getFighterDetails(String fighterId) async {
+    return _remoteSource.getFighterDetails(fighterId: fighterId);
+  }
 }

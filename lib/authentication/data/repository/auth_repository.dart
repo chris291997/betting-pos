@@ -14,12 +14,16 @@ class AuthRepository implements AuthRepositoryInterface {
   @override
   Future<void> login({required AuthInput input}) async {
     final output = await _remoteSource.login(input: input);
-
     await _localSource.saveTokens(output);
+    final user = await _userRemoteSource.getLoggedUser();
+    await _localSource.saveLoggedUser(user);
   }
 
   @override
   Future<void> logout() async {
-    await _localSource.deleteTokens();
+    await Future.wait([
+      _localSource.deleteLoggedUser(),
+      _localSource.deleteTokens(),
+    ]);
   }
 }

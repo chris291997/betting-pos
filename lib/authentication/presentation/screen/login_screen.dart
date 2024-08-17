@@ -11,26 +11,20 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(context.layout.mediumPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Betting App', style: context.textStyle.headline4),
-                  Gap(context.layout.largeSpacing),
-                  const Expanded(child: Center(child: LoginForm())),
-                ],
+      body: Padding(
+        padding: EdgeInsets.all(context.layout.smallPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Betting App', style: context.textStyle.headline4),
+            Gap(context.layout.largeSpacing),
+            const Expanded(
+              child: Center(
+                child: LoginForm(),
               ),
             ),
-          ),
-          // Padding(
-          //   padding: EdgeInsets.all(context.layout.mediumPadding),
-          //   child: const LoginImage(),
-          // ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -52,4 +52,12 @@ class FighterRemoteSource {
 
     return FighterOutput.fromJson(response.data);
   }
+
+  Future<FighterOutput> getFighterDetails({required String fighterId}) async {
+    final response = await _manager.get(
+      '$fighterPath/$fighterId',
+    );
+
+    return FighterOutput.fromJson(response.data);
+  }
 }

@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:bet_pos/authentication/presentation/viewmodel/auth_viewmodel.dart';
+import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
+import 'package:bet_pos/common/di/service_locator.dart';
 import 'package:bet_pos/common/theme/theme.dart';
+import 'package:bet_pos/dashboard/presentation/screen/pos_dashboard.dart';
+import 'package:bet_pos/user/data/di/user_service_locator.dart';
 import 'package:bet_pos/user/presentation/bloc/account_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,11 +22,21 @@ class LoginButton extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthViewmodel, AuthState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state.status.isSuccess) {
-              context
-                  .read<AccountBloc>()
-                  .add(AccountEventLoggedUserRequested());
+              final accountBloc = context.read<AccountBloc>();
+
+              final user = await cacheService.read(StorageKey.loggedUser);
+
+              print('user: $user');
+
+              final userOutput = UserOutput.fromJson(jsonDecode(user ?? ''));
+              print('userOutput: $userOutput');
+
+              accountBloc.add(AccountEventUserSet(userOutput));
+
+              // ignore: use_build_context_synchronously
+              context.go(PosDashboard.routeName);
             } else if (state.status.isError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -33,16 +49,6 @@ class LoginButton extends StatelessWidget {
                   backgroundColor: context.colors.error,
                 ),
               );
-              // context.go(EventScreen.routeName);
-            }
-          },
-        ),
-        BlocListener<AccountBloc, AccountState>(
-          listenWhen: (previous, current) =>
-              previous.userOutput != current.userOutput,
-          listener: (context, state) {
-            if (state.userOutput.isNotEmpty) {
-              // context.go(EventScreen.routeName);
             }
           },
         ),
@@ -50,19 +56,14 @@ class LoginButton extends StatelessWidget {
       child: BlocBuilder<AuthViewmodel, AuthState>(
         buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, authState) {
-          return BlocBuilder<AccountBloc, AccountState>(
-            builder: (context, accountState) {
-              return PrimaryButton(
-                labelText: 'Login',
-                state:
-                    accountState.status.isLoading || authState.status.isLoading
-                        ? PrimaryButtonState.loading
-                        : PrimaryButtonState.enabled,
-                onPressed: () {
-                  // context.go(EventScreen.routeName);
-                  context.read<AuthViewmodel>().add(AuthLoginRequested());
-                },
-              );
+          return PrimaryButton(
+            labelText: 'Login',
+            state: authState.status.isLoading
+                ? PrimaryButtonState.loading
+                : PrimaryButtonState.enabled,
+            onPressed: () {
+              // context.go(EventScreen.routeName);
+              context.read<AuthViewmodel>().add(AuthLoginRequested());
             },
           );
         },

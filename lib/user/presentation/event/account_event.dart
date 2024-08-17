@@ -8,3 +8,12 @@ sealed class AccountEvent extends Equatable {
 }
 
 class AccountEventLoggedUserRequested extends AccountEvent {}
+
+class AccountEventUserSet extends AccountEvent {
+  const AccountEventUserSet(this.user);
+
+  final UserOutput user;
+
+  @override
+  List<Object> get props => [user];
+}

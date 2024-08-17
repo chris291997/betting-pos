@@ -17,34 +17,39 @@ class ConfirmBetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SelectBetCard(
-                fighterOutput: FighterOutput.empty,
-                fighterType: selectedFighterType,
-                isSelected: true,
-                onTap: () {}),
-            const SizedBox(
-              height: 30,
-            ),
-            const Divider(),
-            const SizedBox(
-              height: 30,
-            ),
-            const BetPaymentDetails(),
-            const SizedBox(
-              height: 30,
-            ),
-            const PaymentOption(),
-            const SizedBox(
-              height: 30,
-            ),
-            BetNextStepButton(
-              label: 'Confirm Payment',
-              onPressed: () {},
-            )
-          ],
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 600,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SelectBetCard(
+                  fighterOutput: FighterOutput.empty,
+                  fighterType: selectedFighterType,
+                  isSelected: true,
+                  onTap: () {}),
+              const SizedBox(
+                height: 30,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 30,
+              ),
+              const BetPaymentDetails(),
+              const SizedBox(
+                height: 30,
+              ),
+              const PaymentOption(),
+              const SizedBox(
+                height: 30,
+              ),
+              BetNextStepButton(
+                label: 'Confirm Payment',
+                onPressed: () {},
+              )
+            ],
+          ),
         ),
       ),
     );

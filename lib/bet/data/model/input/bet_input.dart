@@ -4,57 +4,62 @@ class BetInput extends Equatable {
   const BetInput({
     required this.betAmount,
     required this.betDetails,
-    required this.fightId,
-    required this.eventId,
+    required this.fight,
+    required this.event,
     required this.betOn,
-    required this.posId,
   });
 
-  final int betAmount;
+  final double betAmount;
   final String betDetails;
-  final String fightId;
-  final String eventId;
-  final String betOn;
-  final String posId;
+  final FightOutput fight;
+  final EventOutput event;
+  final FighterOutput betOn;
 
   Map<String, dynamic> toJson() {
     return {
       'betAmount': betAmount,
       'betDetails': betDetails,
-      'fightId': fightId,
-      'eventId': eventId,
-      'betOn': betOn,
-      'posId': posId,
+      'fightId': fight.id,
+      'eventId': event.id,
+      'betOn': betOn.id,
     };
   }
 
   BetInput copyWith({
-    int? betAmount,
+    double? betAmount,
     String? betDetails,
-    String? fightId,
-    String? eventId,
-    String? betOn,
+    FightOutput? fight,
+    EventOutput? event,
+    FighterOutput? betOn,
     String? posId,
   }) {
     return BetInput(
       betAmount: betAmount ?? this.betAmount,
       betDetails: betDetails ?? this.betDetails,
-      fightId: fightId ?? this.fightId,
-      eventId: eventId ?? this.eventId,
+      fight: fight ?? this.fight,
+      event: event ?? this.event,
       betOn: betOn ?? this.betOn,
-      posId: posId ?? this.posId,
     );
   }
 
   const BetInput.empty()
       : betAmount = 0,
         betDetails = '',
-        fightId = '',
-        eventId = '',
-        betOn = '',
-        posId = '';
+        fight = FightOutput.empty,
+        event = const EventOutput.empty(),
+        betOn = FighterOutput.empty;
+
+  bool get hasEmptyAttribute {
+    final json = toJson();
+    return json.values.any((value) => value == '' || value == 0);
+  }
 
   @override
-  List<Object> get props =>
-      [betAmount, betDetails, fightId, eventId, betOn, posId];
+  List<Object> get props => [
+        betAmount,
+        betDetails,
+        fight,
+        event,
+        betOn,
+      ];
 }

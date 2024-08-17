@@ -28,6 +28,7 @@ class FightOutput extends Equatable implements JsonSerializable {
   static const empty = FightOutput();
 
   bool get isEmpty => this == FightOutput.empty;
+  bool get isNotEmpty => this != FightOutput.empty;
 
   factory FightOutput.fromJson(Map<String, dynamic> json) {
     return FightOutput(

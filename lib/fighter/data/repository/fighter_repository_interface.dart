@@ -6,4 +6,5 @@ abstract interface class FighterRepositoryInterface {
       {required String fighterId, required UdpateFighterInput input});
   Future<void> deleteFighter({required String fighterId});
   Future<List<FighterOutput>> getFighters();
+  Future<FighterOutput> getFighterDetails(String fighterId);
 }

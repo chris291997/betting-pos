@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bet_pos/common/di/service_locator.dart';
 import 'package:bet_pos/user/data/di/user_service_locator.dart';
 import 'package:equatable/equatable.dart';

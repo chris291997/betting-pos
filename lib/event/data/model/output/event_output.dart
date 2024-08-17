@@ -52,6 +52,18 @@ class EventOutput extends Equatable implements JsonSerializable {
     };
   }
 
+  const EventOutput.empty()
+      : id = '',
+        eventName = '',
+        location = '',
+        creatorId = '',
+        eventDate = null,
+        createdAt = null,
+        updatedAt = null;
+
+  bool get isEmpty => this == const EventOutput.empty();
+  bool get isNotEmpty => this != const EventOutput.empty();
+
   @override
   List<Object?> get props => [
         id,
