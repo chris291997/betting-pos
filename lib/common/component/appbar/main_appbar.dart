@@ -1,3 +1,4 @@
+import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -28,7 +29,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
               },
             )
           : null,
-      title: Text(title),
+      title: Text(title, style: context.textStyle.headline4),
       centerTitle: true,
     );
   }

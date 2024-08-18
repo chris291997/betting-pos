@@ -33,7 +33,7 @@ class PosDashboard extends StatelessWidget {
                 onPressed: () {
                   context.push(SelectToBetScreen.routeName);
                 },
-                labelText: 'Transact',
+                labelText: 'Place Bet',
               ),
               const SizedBox(
                 height: 30,
@@ -42,7 +42,7 @@ class PosDashboard extends StatelessWidget {
                 onPressed: () {
                   context.push(BetDetailsScreen.routeName);
                 },
-                labelText: 'Payout',
+                labelText: 'View Transaction',
               )
             ],
           ),

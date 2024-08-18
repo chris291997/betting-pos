@@ -18,7 +18,7 @@ class BetInput extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'betAmount': betAmount,
-      'betDetails': betDetails,
+      'betDetails': 'The bet is on ${betOn.id} in the fight between ${fight.walaId} and ${fight.meronId}',
       'fightId': fight.id,
       'eventId': event.id,
       'betOn': betOn.id,
@@ -51,6 +51,7 @@ class BetInput extends Equatable {
 
   bool get hasEmptyAttribute {
     final json = toJson();
+    print(json);
     return json.values.any((value) => value == '' || value == 0);
   }
 

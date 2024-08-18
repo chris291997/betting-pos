@@ -11,17 +11,14 @@ class BetContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<BetBloc, BetState, bool>(
-      selector: (state) {
-        return state.input.hasEmptyAttribute;
-      },
-      builder: (context, hasEmptyAttribute) {
+    return BlocBuilder<BetBloc, BetState>(
+      builder: (context, state) {
         return BetNextStepButton(
           label: 'Continue',
           onPressed: () {
-            // if (hasEmptyAttribute) {
-            //   return;
-            // }
+            if (state.input.hasEmptyAttribute) {
+              return;
+            }
 
             Navigator.push(
               context,

@@ -1,37 +1,39 @@
 import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class PaymentOption extends StatelessWidget {
   const PaymentOption({super.key});
 
+  static const _moneySVG = 'assets/svg/money.svg';
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Payment'),
+        Text('Payment', style: context.textStyle.subtitle1),
         const SizedBox(
           height: 30,
         ),
         Container(
-          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.lightGreen,
             ),
           ),
+          padding: EdgeInsets.all(
+            context.layout.mediumPadding,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(
-                Icons.money,
-                color: Colors.lightGreen,
+              SvgPicture.asset(
+                _moneySVG,
+                height: 28,
+                width: 28,
+                fit: BoxFit.contain,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.layout.mediumPadding),
-                child: const Text('Cash'),
-              ),
+              Text('Cash', style: context.textStyle.subtitle2),
             ],
           ),
         )

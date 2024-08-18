@@ -11,12 +11,14 @@ class BetScreenWrapper extends StatelessWidget {
     required this.nextButtons,
     this.onAppbarBackButtonPressed,
     this.displayAppBar = true,
+    this.contentVerticalAlignment = MainAxisAlignment.start,
   });
 
   final bool displayAppBar;
   final String appBarTitle;
   final List<Widget> content;
   final List<Widget> nextButtons;
+  final MainAxisAlignment contentVerticalAlignment;
   final Function()? onAppbarBackButtonPressed;
 
   @override
@@ -28,27 +30,50 @@ class BetScreenWrapper extends StatelessWidget {
               onBackButtonPressed: onAppbarBackButtonPressed,
             )
           : null,
-      body: Center(
-        child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: ScreenBreakpoint.tabletMaxWidth,
-          ),
-          padding: EdgeInsets.all(context.layout.mediumPadding),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: content,
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: ScreenBreakpoint.tabletMaxWidth,
+            ),
+            padding: EdgeInsets.all(context.layout.mediumPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (contentVerticalAlignment == MainAxisAlignment.start) ...[
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: content,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              ...nextButtons,
-            ],
+                ] else ...[
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: contentVerticalAlignment,
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: contentVerticalAlignment,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: content,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 10),
+                ...nextButtons,
+              ],
+            ),
           ),
         ),
       ),

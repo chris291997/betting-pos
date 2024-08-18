@@ -2,6 +2,7 @@ import 'package:bet_pos/bet/data/di/bet_service_locator.dart';
 import 'package:bet_pos/bet/presentation/bloc/bet_details_bloc.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
 import 'package:bet_pos/common/component/textfield/primary_search_bar.dart';
+import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -18,19 +19,23 @@ class BetDetailsScreen extends StatelessWidget {
       child: BlocBuilder<BetDetailsBloc, BetDetailsState>(
         builder: (context, state) {
           final receiptDetails = state.betOutput.toReceiptDetails();
+          final status = state.status;
 
           return BetScreenWrapper(
             appBarTitle: 'Transaction Details',
+            contentVerticalAlignment: status.isSuccess
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
             content: [
-              if (state.status.isLoading) ...[
+              if (status.isLoading) ...[
                 const Center(
                   child: CircularProgressIndicator(),
                 )
-              ] else if (state.status.isError) ...[
+              ] else if (status.isError) ...[
                 const Center(
                   child: Text('No Transaction Found'),
                 )
-              ] else if (state.status.isSuccess) ...[
+              ] else if (status.isSuccess) ...[
                 _BetDetailItem(
                   label: 'Transaction ID',
                   value: receiptDetails.transactionId,
@@ -72,10 +77,8 @@ class BetDetailsScreen extends StatelessWidget {
                   value: receiptDetails.createdAt,
                 )
               ] else ...[
-                const SizedBox(
-                  child: Center(
-                    child: Text('No Transaction Requested'),
-                  ),
+                const Center(
+                  child: Text('No Transaction Requested'),
                 ),
               ]
             ],
@@ -121,12 +124,10 @@ class _BetDetailItem extends StatelessWidget {
         children: [
           Text(
             '$label: ',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+            style: context.textStyle.subtitle1,
           ),
           Expanded(
-            child: Text(value),
+            child: Text(value, style: context.textStyle.subtitle2),
           ),
         ],
       ),

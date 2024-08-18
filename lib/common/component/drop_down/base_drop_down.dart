@@ -1,7 +1,8 @@
+import 'package:bet_pos/common/theme/theme.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
-class BaseDropDown extends StatelessWidget {
+class BaseDropDown<T> extends StatelessWidget {
   const BaseDropDown({
     super.key,
     required this.status,
@@ -38,9 +39,9 @@ class BaseDropDown extends StatelessWidget {
   final BaseDropdownStatus status;
   final String header;
   final String hint;
-  final String? value;
-  final List<String> dropdownItems;
-  final ValueChanged<String?>? onChanged;
+  final T? value;
+  final List<DropdownMenuItem<T>> dropdownItems;
+  final ValueChanged<T?>? onChanged;
   final DropdownButtonBuilder? selectedItemBuilder;
   final Alignment? hintAlignment;
   final Alignment? valueAlignment;
@@ -68,7 +69,7 @@ class BaseDropDown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(header),
+        Text(header, style: context.textStyle.subtitle1),
         const SizedBox(height: 10),
         if (status.isLoading || status.isDisabled)
           _DisableOrLoadingDropdown(
@@ -114,7 +115,7 @@ class BaseDropDown extends StatelessWidget {
   }
 }
 
-class EnabledDropdown extends StatelessWidget {
+class EnabledDropdown<T> extends StatelessWidget {
   const EnabledDropdown({
     super.key,
     required this.hintAlignment,
@@ -145,10 +146,10 @@ class EnabledDropdown extends StatelessWidget {
 
   final Alignment? hintAlignment;
   final String hint;
-  final String? value;
-  final List<String> dropdownItems;
+  final T? value;
+  final List<DropdownMenuItem<T>> dropdownItems;
   final Alignment? valueAlignment;
-  final ValueChanged<String?>? onChanged;
+  final ValueChanged<T?>? onChanged;
   final DropdownButtonBuilder? selectedItemBuilder;
   final double? buttonHeight;
   final double? buttonWidth;
@@ -170,7 +171,7 @@ class EnabledDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField2<String>(
+    return DropdownButtonFormField2<T>(
       isExpanded: true,
       hint: Container(
         alignment: hintAlignment,
@@ -178,29 +179,23 @@ class EnabledDropdown extends StatelessWidget {
           hint,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
-          style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).hintColor,
-          ),
+          style: context.textStyle.button,
         ),
       ),
       value: value,
-      items: dropdownItems
-          .map((String item) => DropdownMenuItem<String>(
-                value: item,
-                child: Container(
-                  alignment: valueAlignment,
-                  child: Text(
-                    item,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ))
-          .toList(),
+      items: dropdownItems,
+      // items: dropdownItems
+      //     .map((String item) => DropdownMenuItem<String>(
+      //           value: item,
+      //           child: Container(
+      //             alignment: valueAlignment,
+      //             child: Text(item,
+      //                 overflow: TextOverflow.ellipsis,
+      //                 maxLines: 1,
+      //                 style: context.textStyle.subtitle1),
+      //           ),
+      //         ))
+      //     .toList(),
       onChanged: onChanged,
       selectedItemBuilder: selectedItemBuilder,
       buttonStyleData: ButtonStyleData(
@@ -224,7 +219,7 @@ class EnabledDropdown extends StatelessWidget {
       ),
       dropdownStyleData: DropdownStyleData(
         maxHeight: dropdownHeight ?? 200,
-        width: dropdownWidth ?? 140,
+        width: dropdownWidth ?? 150,
         padding: dropdownPadding,
         decoration: dropdownDecoration ??
             BoxDecoration(
@@ -236,6 +231,9 @@ class EnabledDropdown extends StatelessWidget {
       menuItemStyleData: MenuItemStyleData(
         height: itemHeight ?? 40,
         padding: itemPadding ?? const EdgeInsets.only(left: 14, right: 14),
+      ),
+      decoration: const InputDecoration(
+        border: InputBorder.none,
       ),
     );
   }
@@ -279,12 +277,8 @@ class _DisableOrLoadingDropdown extends StatelessWidget {
             ),
           ),
       child: status.isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor,
-                ),
-              ),
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,10 +289,8 @@ class _DisableOrLoadingDropdown extends StatelessWidget {
                     hint,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).hintColor,
-                    ),
+                    style:
+                        context.textStyle.button.copyWith(color: Colors.grey),
                   ),
                 ),
                 Icon(

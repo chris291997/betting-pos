@@ -1,4 +1,5 @@
 import 'package:bet_pos/bet/presentation/bloc/bet_bloc.dart';
+import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,25 +16,28 @@ class BetPaymentDetails extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Bet Payment Details'),
+            Text('Bet Payment Details', style: context.textStyle.subtitle1),
             const SizedBox(
               height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Bet'),
-                Text(amount.toString()),
+                Text('Bet', style: context.textStyle.subtitle2),
+                Text(
+                  amount.toString(),
+                  style: context.textStyle.subtitle2,
+                ),
               ],
             ),
             const SizedBox(
               height: 10,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Others'),
-                Text('0'),
+                Text('Others', style: context.textStyle.subtitle2),
+                Text('0', style: context.textStyle.subtitle2),
               ],
             ),
             const SizedBox(
@@ -46,8 +50,8 @@ class BetPaymentDetails extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Total'),
-                Text(amount.toString()),
+                Text('Total', style: context.textStyle.subtitle2),
+                Text(amount.toString(), style: context.textStyle.subtitle2),
               ],
             ),
             const SizedBox(
