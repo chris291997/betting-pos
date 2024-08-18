@@ -33,7 +33,7 @@ class SelectToBetScreen extends StatelessWidget {
           BetFormField(),
           SizedBox(height: 20),
         ],
-        nextButton: const BetContinueButton(),
+        nextButtons: const [BetContinueButton()],
         onAppbarBackButtonPressed: () {
           if (context.canPop()) {
             context.pop();

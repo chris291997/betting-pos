@@ -41,7 +41,7 @@ class UserOutput extends Equatable {
       middleName: json.parseString('middleName'),
       lastName: json.parseString('lastName'),
       username: json.parseString('userName'),
-      createdBy: json.parseString('createdBy'),
+      createdBy: json.tryParseString('createdBy') ?? '',
       createdAt: json.parseDateTime('createdAt'),
       updatedAt: json.parseDateTime('updatedAt'),
     );

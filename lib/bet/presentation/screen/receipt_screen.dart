@@ -1,11 +1,15 @@
 import 'package:bet_pos/bet/data/di/bet_service_locator.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
+import 'package:bet_pos/bet/presentation/component/done_button.dart';
 import 'package:bet_pos/bet/presentation/component/print_receipt_button.dart';
 import 'package:bet_pos/bet/presentation/component/receipt_pdf_view.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptScreen extends StatelessWidget {
-  const ReceiptScreen({super.key, required this.betOutput});
+  const ReceiptScreen({
+    super.key,
+    required this.betOutput,
+  });
 
   final BetOutput betOutput;
 
@@ -18,7 +22,11 @@ class ReceiptScreen extends StatelessWidget {
           betOutput: betOutput,
         ),
       ],
-      nextButton: const PrintReceiptButton(),
+      nextButtons: const [
+        PrintReceiptButton(),
+        SizedBox(height: 10),
+        DoneButton(),
+      ],
       onAppbarBackButtonPressed: () {},
     );
   }

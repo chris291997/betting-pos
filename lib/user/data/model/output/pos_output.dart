@@ -3,7 +3,7 @@ part of '../../di/user_service_locator.dart';
 class PosOutput extends Equatable {
   const PosOutput({
     this.id = '',
-    this.posNumber = 0,
+    this.posNumber = '',
     this.isBlocked = false,
     this.createdAt,
     this.updatedAt,
@@ -11,7 +11,7 @@ class PosOutput extends Equatable {
   });
 
   final String id;
-  final int posNumber;
+  final String posNumber;
   final bool isBlocked;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -19,7 +19,7 @@ class PosOutput extends Equatable {
 
   static const PosOutput empty = PosOutput(
     id: '',
-    posNumber: 0,
+    posNumber: '',
     isBlocked: false,
     user: UserOutput.empty,
   );
@@ -27,7 +27,7 @@ class PosOutput extends Equatable {
   factory PosOutput.fromJson(Map<String, dynamic> json) {
     return PosOutput(
       id: json.parseString('id'),
-      posNumber: json.parseInt('posNumber'),
+      posNumber: json.parseString('posNumber'),
       isBlocked: json.parseBool('isBlocked'),
       createdAt: json.parseDateTime('createdAt'),
       updatedAt: json.parseDateTime('updatedAt'),
@@ -48,7 +48,7 @@ class PosOutput extends Equatable {
 
   PosOutput copyWith({
     String? id,
-    int? posNumber,
+    String? posNumber,
     bool? isBlocked,
     DateTime? createdAt,
     DateTime? updatedAt,

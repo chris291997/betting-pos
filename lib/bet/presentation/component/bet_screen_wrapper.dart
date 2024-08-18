@@ -8,7 +8,7 @@ class BetScreenWrapper extends StatelessWidget {
     super.key,
     this.appBarTitle = '',
     required this.content,
-    required this.nextButton,
+    required this.nextButtons,
     this.onAppbarBackButtonPressed,
     this.displayAppBar = true,
   });
@@ -16,7 +16,7 @@ class BetScreenWrapper extends StatelessWidget {
   final bool displayAppBar;
   final String appBarTitle;
   final List<Widget> content;
-  final Widget nextButton;
+  final List<Widget> nextButtons;
   final Function()? onAppbarBackButtonPressed;
 
   @override
@@ -47,7 +47,7 @@ class BetScreenWrapper extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              nextButton,
+              ...nextButtons,
             ],
           ),
         ),

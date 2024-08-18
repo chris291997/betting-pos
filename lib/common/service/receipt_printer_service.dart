@@ -8,7 +8,8 @@ import 'package:printing/printing.dart';
 class ReceiptPrinterService {
   ReceiptPrinterService();
 
-  Future<List<int>> printReceiptUsingThermalPrinter(ReceiptDetails receiptDetails) async {
+  Future<List<int>> printReceiptUsingThermalPrinter(
+      ReceiptDetails receiptDetails) async {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm80, profile);
     List<int> bytes = [];
@@ -41,7 +42,7 @@ class ReceiptPrinterService {
     bytes += generator.feed(1);
     bytes += generator.text('Bet On: ${receiptDetails.betOnName}');
     bytes += generator.feed(1);
-    bytes += generator.text('Bet Amount: \$${receiptDetails.betAmount}');
+    bytes += generator.text('Bet Amount: ₱${receiptDetails.betAmount}');
     bytes += generator.feed(1);
     bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
     bytes += generator.feed(1);
@@ -114,7 +115,7 @@ class ReceiptPrinterService {
                 ),
                 pw.SizedBox(height: 10),
                 pw.Text(
-                  'Bet Amount: \$${receiptDetails.betAmount}',
+                  'Bet Amount: ₱${receiptDetails.betAmount}',
                   style: pw.TextStyle(font: ttf, fontSize: 12),
                 ),
                 pw.SizedBox(height: 10),

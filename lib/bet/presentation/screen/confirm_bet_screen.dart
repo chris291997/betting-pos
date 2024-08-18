@@ -19,6 +19,8 @@ class ConfirmBetScreen extends StatelessWidget {
     return BlocConsumer<BetBloc, BetState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
+          context.read<BetBloc>().add(BetInitialized());
+
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -27,8 +29,6 @@ class ConfirmBetScreen extends StatelessWidget {
               ),
             ),
           );
-
-          context.read<BetBloc>().add(BetInitialized());
         }
       },
       builder: (context, state) {
@@ -52,15 +52,17 @@ class ConfirmBetScreen extends StatelessWidget {
               height: 30,
             ),
           ],
-          nextButton: BetNextStepButton(
-            label: 'Confirm Payment',
-            state: state.status.isLoading
-                ? PrimaryButtonState.loading
-                : PrimaryButtonState.enabled,
-            onPressed: () {
-              context.read<BetBloc>().add(BetSubmitted());
-            },
-          ),
+          nextButtons: [
+            BetNextStepButton(
+              label: 'Confirm Payment',
+              state: state.status.isLoading
+                  ? PrimaryButtonState.loading
+                  : PrimaryButtonState.enabled,
+              onPressed: () {
+                context.read<BetBloc>().add(BetSubmitted());
+              },
+            ),
+          ],
         );
       },
     );

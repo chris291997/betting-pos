@@ -104,7 +104,7 @@ extension BetOutputMapper on BetOutput {
       fightNumber: fight.fightNumber,
       betOnName: betOn.name,
       betAmount: betAmount,
-      posNumber: pos.id,
+      posNumber: pos.posNumber,
       userName: pos.user.username,
       createdAt: createdAt?.toIso8601String() ?? '',
       qrToken: qrToken,

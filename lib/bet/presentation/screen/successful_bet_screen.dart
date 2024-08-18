@@ -12,7 +12,7 @@ class SuccessfulBetScreen extends StatelessWidget {
       content: const [
         Text('Successful Payment'),
       ],
-      nextButton: const ViewReceiptButton(),
+      nextButtons: const [ViewReceiptButton()],
       onAppbarBackButtonPressed: () {},
     );
   }
