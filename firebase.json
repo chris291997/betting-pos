@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "betting-pos",
+          "appId": "1:226638631297:android:9850358cd7673206395880",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "betting-pos",
+          "appId": "1:226638631297:ios:fe01d1499a60263a395880",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "betting-pos",
+          "configurations": {
+            "android": "1:226638631297:android:9850358cd7673206395880",
+            "ios": "1:226638631297:ios:fe01d1499a60263a395880",
+            "web": "1:226638631297:web:15d3082986fa1ca5395880"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

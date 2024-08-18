@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "226638631297",
+    "project_id": "betting-pos",
+    "storage_bucket": "betting-pos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226638631297:android:9850358cd7673206395880",
+        "android_client_info": {
+          "package_name": "com.example.bet_pos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_dEQ9dXlXKoKLZpQRKXIgZzbZBYWAgTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
