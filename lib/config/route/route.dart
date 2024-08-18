@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bet_pos/authentication/presentation/screen/login_screen.dart';
+import 'package:bet_pos/bet/presentation/screen/bet_details_screen.dart';
 import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
 import 'package:bet_pos/common/di/service_locator.dart';
 import 'package:bet_pos/dashboard/presentation/screen/pos_dashboard.dart';
@@ -35,6 +36,12 @@ final router = GoRouter(
       path: SelectToBetScreen.routeName,
       builder: (context, state) {
         return const SelectToBetScreen();
+      },
+    ),
+    GoRoute(
+      path: BetDetailsScreen.routeName,
+      builder: (context, state) {
+        return const BetDetailsScreen();
       },
     ),
   ],

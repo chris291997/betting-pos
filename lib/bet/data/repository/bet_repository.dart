@@ -35,4 +35,16 @@ class BetRepository implements BetRepositoryInterface {
   Future<FighterOutput> getFighter({required String fighterId}) async {
     return _fighterRemoteSource.getFighter(fighterId: fighterId);
   }
+
+  @override
+  Future<BetOutput> findBetDetailsByTransactionId(
+      {required String transactionId}) async {
+    return _betRemoteSource.findBetDetailsByTransactionId(
+        transactionId: transactionId);
+  }
+
+  @override
+  Future<BetOutput> findBetDetailsByQrToken({required String qrToken}) async {
+    return _betRemoteSource.findBetDetailsByQrToken(qrToken: qrToken);
+  }
 }

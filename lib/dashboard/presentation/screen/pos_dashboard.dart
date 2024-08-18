@@ -1,3 +1,4 @@
+import 'package:bet_pos/bet/presentation/screen/bet_details_screen.dart';
 import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
 import 'package:bet_pos/common/component/appbar/main_appbar.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
@@ -30,7 +31,7 @@ class PosDashboard extends StatelessWidget {
             children: [
               PrimaryButton(
                 onPressed: () {
-                  context.go(SelectToBetScreen.routeName);
+                  context.push(SelectToBetScreen.routeName);
                 },
                 labelText: 'Transact',
               ),
@@ -38,7 +39,9 @@ class PosDashboard extends StatelessWidget {
                 height: 30,
               ),
               PrimaryButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(BetDetailsScreen.routeName);
+                },
                 labelText: 'Payout',
               )
             ],
