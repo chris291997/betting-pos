@@ -77,6 +77,8 @@ class BetOutput extends Equatable {
         createdAt = null,
         updatedAt = null;
 
+  bool get isNotEmpty => this != const BetOutput.empty();
+
   @override
   List<Object?> get props => [
         id,

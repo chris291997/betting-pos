@@ -29,7 +29,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
               },
             )
           : null,
-      title: Text(title, style: context.textStyle.headline4),
+      title: Text(title, style: context.textStyle.headline6),
       centerTitle: true,
     );
   }
