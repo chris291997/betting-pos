@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(lazy: false, create: (_) => AccountBloc(userRepository)),
       ],
       child: MaterialApp.router(
-        title: 'Pos App',
+        title: 'POS App',
         routerConfig: router,
         debugShowCheckedModeBanner: false,
       ),

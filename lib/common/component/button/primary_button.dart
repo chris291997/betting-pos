@@ -7,10 +7,12 @@ class PrimaryButton extends StatelessWidget {
     this.labelText = '',
     this.label,
     this.state = PrimaryButtonState.enabled,
+    this.height,
     super.key,
   });
 
   final Widget? label;
+  final double? height;
   final String labelText;
   final void Function() onPressed;
   final PrimaryButtonState state;
@@ -19,6 +21,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
+      height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(

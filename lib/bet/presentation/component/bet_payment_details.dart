@@ -13,6 +13,7 @@ class BetPaymentDetails extends StatelessWidget {
       },
       builder: (context, amount) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('Bet Payment Details'),
             const SizedBox(
@@ -39,6 +40,16 @@ class BetPaymentDetails extends StatelessWidget {
               height: 10,
             ),
             const Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Total'),
+                Text(amount.toString()),
+              ],
+            ),
             const SizedBox(
               height: 30,
             ),

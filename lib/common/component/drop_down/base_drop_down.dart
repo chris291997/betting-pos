@@ -66,6 +66,7 @@ class BaseDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(header),
         const SizedBox(height: 10),
@@ -267,7 +268,7 @@ class _DisableOrLoadingDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: buttonHeight ?? 40,
-      width: buttonWidth ?? 140,
+      width: buttonWidth ?? double.infinity,
       padding: buttonPadding ?? const EdgeInsets.only(left: 14, right: 14),
       decoration: buttonDecoration ??
           BoxDecoration(

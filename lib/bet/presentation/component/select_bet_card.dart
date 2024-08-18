@@ -42,15 +42,18 @@ class _CardContent extends StatelessWidget {
     return SizedBox(
       height: 100,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const Placeholder(
                 fallbackHeight: 70,
                 fallbackWidth: 70,
               ),
               const SizedBox(
-                width: 10,
+                width: 25,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,

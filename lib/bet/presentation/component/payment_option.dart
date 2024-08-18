@@ -1,3 +1,4 @@
+import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class PaymentOption extends StatelessWidget {
@@ -6,6 +7,7 @@ class PaymentOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Payment'),
         const SizedBox(
@@ -18,10 +20,18 @@ class PaymentOption extends StatelessWidget {
               color: Colors.lightGreen,
             ),
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Cash'),
+              const Icon(
+                Icons.money,
+                color: Colors.lightGreen,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: context.layout.mediumPadding),
+                child: const Text('Cash'),
+              ),
             ],
           ),
         )

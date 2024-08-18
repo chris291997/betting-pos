@@ -10,6 +10,7 @@ class BetFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Bet'),
         const SizedBox(

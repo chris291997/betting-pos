@@ -1,5 +1,8 @@
 import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
+import 'package:bet_pos/common/component/appbar/main_appbar.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
+import 'package:bet_pos/common/theme/screen_size/screen_breakpoint.dart';
+import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,22 +14,37 @@ class PosDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const MainAppbar(
+        title: 'Dashboard',
+        showBackButton: false,
+      ),
       body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          PrimaryButton(
-            onPressed: () {
-              context.go(SelectToBetScreen.routeName);
-            },
-            labelText: 'Transact',
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: ScreenBreakpoint.tabletMaxWidth,
           ),
-          PrimaryButton(
-            onPressed: () {},
-            labelText: 'Payout',
-          )
-        ],
-      )),
+          padding: EdgeInsets.all(context.layout.mediumPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              PrimaryButton(
+                onPressed: () {
+                  context.go(SelectToBetScreen.routeName);
+                },
+                labelText: 'Transact',
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              PrimaryButton(
+                onPressed: () {},
+                labelText: 'Payout',
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -19,9 +19,9 @@ class BetContinueButton extends StatelessWidget {
         return BetNextStepButton(
           label: 'Continue',
           onPressed: () {
-            if (hasEmptyAttribute) {
-              return;
-            }
+            // if (hasEmptyAttribute) {
+            //   return;
+            // }
 
             Navigator.push(
               context,
