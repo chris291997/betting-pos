@@ -36,7 +36,8 @@ class BetBloc extends Bloc<BetEvent, BetState> {
 
   void _onBetFightAdded(BetFightAdded event, Emitter<BetState> emit) {
     emit(state.copyWith(
-      input: state.input.copyWith(fight: event.fight, betOn: FighterOutput.empty),
+      input:
+          state.input.copyWith(fight: event.fight, betOn: FighterOutput.empty),
     ));
   }
 
@@ -55,9 +56,15 @@ class BetBloc extends Bloc<BetEvent, BetState> {
   void _onBetSubmitted(BetSubmitted event, Emitter<BetState> emit) async {
     try {
       emit(state.copyWith(status: BetStatus.loading));
-      await _betRepository.createBet(input: state.input);
 
-      emit(state.copyWith(status: BetStatus.success));
+      final result = await _betRepository.createBet(input: state.input);
+
+      emit(
+        state.copyWith(
+          status: BetStatus.success,
+          betOutput: result,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: BetStatus.error));
     }

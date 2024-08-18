@@ -6,9 +6,11 @@ class BetNextStepButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.state = PrimaryButtonState.enabled,
   });
 
   final String label;
+  final PrimaryButtonState state;
   final void Function() onPressed;
 
   @override
@@ -16,6 +18,7 @@ class BetNextStepButton extends StatelessWidget {
     return PrimaryButton(
       labelText: label,
       onPressed: onPressed,
+      state: state,
     );
   }
 }

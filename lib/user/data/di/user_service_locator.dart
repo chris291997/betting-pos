@@ -7,6 +7,7 @@ part '../model/base_model/user_input.dart';
 part '../model/input/create_user_input.dart';
 part '../model/input/update_user_input.dart';
 part '../model/output/user_output.dart';
+part '../model/output/pos_output.dart';
 part '../repository/user_repository.dart';
 part '../repository/user_repository_interface.dart';
 

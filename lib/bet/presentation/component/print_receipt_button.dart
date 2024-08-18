@@ -9,7 +9,7 @@ class PrintReceiptButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BetNextStepButton(
-      label: 'Print',
+      label: 'Use Thermal Printer',
       onPressed: () {},
     );
   }

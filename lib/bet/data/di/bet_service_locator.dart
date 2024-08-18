@@ -1,5 +1,6 @@
 import 'package:bet_pos/common/di/service_locator.dart';
 import 'package:bet_pos/common/helper/extension/json.dart';
+import 'package:bet_pos/common/service/receipt_printer_service.dart';
 import 'package:bet_pos/event/data/di/event_service_locator.dart';
 import 'package:bet_pos/fight/data/di/fight_service_locator.dart';
 import 'package:bet_pos/fighter/data/di/fighter_service_locator.dart';

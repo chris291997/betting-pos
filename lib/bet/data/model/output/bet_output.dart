@@ -17,14 +17,14 @@ class BetOutput extends Equatable {
   });
 
   final String id;
-  final int betAmount;
+  final double betAmount;
   final String betDetails;
   final String transactionId;
   final String qrToken;
   final EventOutput event;
   final FightOutput fight;
   final FighterOutput betOn;
-  final UserOutput pos;
+  final PosOutput pos;
   final bool isVoid;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -32,14 +32,14 @@ class BetOutput extends Equatable {
   factory BetOutput.fromJson(Map<String, dynamic> json) {
     return BetOutput(
       id: json.parseString('id'),
-      betAmount: json.parseInt('betAmount'),
+      betAmount: json.parseDouble('betAmount'),
       betDetails: json.parseString('betDetails'),
       transactionId: json.parseString('transactionId'),
       qrToken: json.parseString('qrToken'),
       event: EventOutput.fromJson(json['event'] as Map<String, dynamic>),
       fight: FightOutput.fromJson(json['fight'] as Map<String, dynamic>),
       betOn: FighterOutput.fromJson(json['betOn'] as Map<String, dynamic>),
-      pos: UserOutput.fromJson(json['pos'] as Map<String, dynamic>),
+      pos: PosOutput.fromJson(json['pos'] as Map<String, dynamic>),
       isVoid: json.parseBool('isVoid'),
       createdAt: json.parseDateTime('createdAt'),
       updatedAt: json.parseDateTime('updatedAt'),
@@ -63,6 +63,20 @@ class BetOutput extends Equatable {
     };
   }
 
+  const BetOutput.empty()
+      : id = '',
+        betAmount = 0,
+        betDetails = '',
+        transactionId = '',
+        qrToken = '',
+        event = const EventOutput.empty(),
+        fight = FightOutput.empty,
+        betOn = FighterOutput.empty,
+        pos = PosOutput.empty,
+        isVoid = false,
+        createdAt = null,
+        updatedAt = null;
+
   @override
   List<Object?> get props => [
         id,
@@ -78,4 +92,22 @@ class BetOutput extends Equatable {
         createdAt,
         updatedAt,
       ];
+}
+
+extension BetOutputMapper on BetOutput {
+  ReceiptDetails toReceiptDetails() {
+    return ReceiptDetails(
+      transactionId: transactionId,
+      eventName: event.eventName,
+      eventDate: event.eventDate?.toIso8601String(),
+      location: event.location,
+      fightNumber: fight.fightNumber,
+      betOnName: betOn.name,
+      betAmount: betAmount,
+      posNumber: pos.id,
+      userName: pos.user.username,
+      createdAt: createdAt?.toIso8601String() ?? '',
+      qrToken: qrToken,
+    );
+  }
 }
