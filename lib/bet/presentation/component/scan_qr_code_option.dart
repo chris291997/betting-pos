@@ -1,7 +1,9 @@
+import 'package:bet_pos/bet/presentation/bloc/bet_details_bloc.dart';
 import 'package:bet_pos/bet/presentation/screen/qr_code_scanner_screen.dart';
 import 'package:bet_pos/common/component/card/base_card.dart';
 import 'package:bet_pos/common/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ScanQrCodeOption extends StatelessWidget {
@@ -13,15 +15,19 @@ class ScanQrCodeOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseCard(
       onTap: () async {
-        final result = await Navigator.push(
+        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const QrCodeScannerScreen()),
+          MaterialPageRoute(
+            builder: (modalContext) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: context.read<BetDetailsBloc>(),
+                ),
+              ],
+              child: const QrCodeScannerScreen(),
+            ),
+          ),
         );
-
-        // Use the result
-        if (result != null) {
-          print('Result: $result');
-        }
       },
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -7,7 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClaimBetScreen extends StatelessWidget {
-  const ClaimBetScreen({super.key});
+  const ClaimBetScreen({
+    super.key,
+    required this.entryPoint,
+  });
+
+  final ClaimBetEntryPoint entryPoint;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +51,24 @@ class ClaimBetScreen extends StatelessWidget {
               ),
             ],
           ],
+          onAppbarBackButtonPressed: () {
+            if (entryPoint.isSearched) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+          },
         );
       },
     );
   }
+}
+
+enum ClaimBetEntryPoint {
+  scanned,
+  searched;
+
+  bool get isScanned => this == ClaimBetEntryPoint.scanned;
+  bool get isSearched => this == ClaimBetEntryPoint.searched;
 }

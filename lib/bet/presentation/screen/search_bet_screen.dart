@@ -53,7 +53,9 @@ class _SearchBetScreen extends StatelessWidget {
                       value: context.read<BetDetailsBloc>(),
                     ),
                   ],
-                  child: const ClaimBetScreen(),
+                  child: const ClaimBetScreen(
+                    entryPoint: ClaimBetEntryPoint.searched,
+                  ),
                 );
               }),
             );

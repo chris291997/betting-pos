@@ -22,10 +22,12 @@ class ReceiptScreen extends StatelessWidget {
           betOutput: betOutput,
         ),
       ],
-      nextButtons: const [
-        PrintReceiptButton(),
-        SizedBox(height: 10),
-        DoneButton(),
+      nextButtons: [
+        PrintReceiptButton(
+          betOutput: betOutput,
+        ),
+        const SizedBox(height: 10),
+        const DoneButton(),
       ],
       onAppbarBackButtonPressed: () {},
     );
