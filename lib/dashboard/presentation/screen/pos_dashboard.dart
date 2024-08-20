@@ -1,4 +1,4 @@
-import 'package:bet_pos/bet/presentation/screen/bet_details_screen.dart';
+import 'package:bet_pos/bet/presentation/screen/search_bet_screen.dart';
 import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
 import 'package:bet_pos/common/component/appbar/main_appbar.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
@@ -40,7 +40,7 @@ class PosDashboard extends StatelessWidget {
               ),
               PrimaryButton(
                 onPressed: () {
-                  context.push(BetDetailsScreen.routeName);
+                  context.push(SearchBetScreen.routeName);
                 },
                 labelText: 'View Transaction',
               )
