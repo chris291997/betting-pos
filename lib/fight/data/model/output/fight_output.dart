@@ -10,6 +10,7 @@ class FightOutput extends Equatable implements JsonSerializable {
     this.startTime = '',
     this.isLocked = false,
     this.winnerId = '',
+    this.fightStatus = FightStatus.notStarted,
     this.createdAt = '',
     this.updatedAt = '',
   });
@@ -22,6 +23,7 @@ class FightOutput extends Equatable implements JsonSerializable {
   final String startTime;
   final bool isLocked;
   final String winnerId;
+  final FightStatus fightStatus;
   final String createdAt;
   final String updatedAt;
 
@@ -40,6 +42,7 @@ class FightOutput extends Equatable implements JsonSerializable {
       startTime: json.parseString('startTime'),
       isLocked: json.parseBool('isLocked'),
       winnerId: json.parseString('winnerId'),
+      fightStatus: FightStatus.parse(json.parseString('fightStatus')),
       createdAt: json.parseString('createdAt'),
       updatedAt: json.parseString('updatedAt'),
     );
@@ -54,6 +57,7 @@ class FightOutput extends Equatable implements JsonSerializable {
       'startTime': startTime,
       'isLocked': isLocked,
       'winnerId': winnerId,
+      'fightStatus': fightStatus.toString(),
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
@@ -82,4 +86,37 @@ class FightOutput extends Equatable implements JsonSerializable {
         createdAt,
         updatedAt,
       ];
+}
+
+enum FightStatus {
+  notStarted,
+  inProgress,
+  concluded;
+
+  static FightStatus parse(String status) {
+    switch (status) {
+      case 'NotStarted':
+        return FightStatus.notStarted;
+      case 'InProgress':
+        return FightStatus.inProgress;
+      case 'Concluded':
+        return FightStatus.concluded;
+      default:
+        throw ArgumentError('Invalid status: $status');
+    }
+  }
+
+  @override
+  String toString() {
+    switch (this) {
+      case FightStatus.notStarted:
+        return 'NotStarted';
+      case FightStatus.inProgress:
+        return 'InProgress';
+      case FightStatus.concluded:
+        return 'Concluded';
+      default:
+        throw ArgumentError('Invalid status: $this');
+    }
+  }
 }
