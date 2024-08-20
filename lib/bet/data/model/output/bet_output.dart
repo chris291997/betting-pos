@@ -4,6 +4,7 @@ class BetOutput extends Equatable {
   const BetOutput({
     required this.id,
     required this.betAmount,
+    required this.winnings,
     required this.betDetails,
     required this.transactionId,
     required this.qrToken,
@@ -12,12 +13,14 @@ class BetOutput extends Equatable {
     required this.betOn,
     required this.pos,
     required this.isVoid,
+    required this.isClaimed,
     this.createdAt,
     this.updatedAt,
   });
 
   final String id;
   final double betAmount;
+  final double winnings;
   final String betDetails;
   final String transactionId;
   final String qrToken;
@@ -26,6 +29,7 @@ class BetOutput extends Equatable {
   final FighterOutput betOn;
   final PosOutput pos;
   final bool isVoid;
+  final bool isClaimed;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -33,6 +37,7 @@ class BetOutput extends Equatable {
     return BetOutput(
       id: json.parseString('id'),
       betAmount: json.parseDouble('betAmount'),
+      winnings: json.parseDouble('winnings'),
       betDetails: json.parseString('betDetails'),
       transactionId: json.parseString('transactionId'),
       qrToken: json.parseString('qrToken'),
@@ -41,6 +46,7 @@ class BetOutput extends Equatable {
       betOn: FighterOutput.fromJson(json['betOn'] as Map<String, dynamic>),
       pos: PosOutput.fromJson(json['pos'] as Map<String, dynamic>),
       isVoid: json.parseBool('isVoid'),
+      isClaimed: json.parseBool('claimed'),
       createdAt: json.parseDateTime('createdAt'),
       updatedAt: json.parseDateTime('updatedAt'),
     );
@@ -50,6 +56,7 @@ class BetOutput extends Equatable {
     return {
       'id': id,
       'betAmount': betAmount,
+      'winnings': winnings,
       'betDetails': betDetails,
       'transactionId': transactionId,
       'qrToken': qrToken,
@@ -58,6 +65,7 @@ class BetOutput extends Equatable {
       'betOn': betOn.toJson(),
       'pos': pos.toJson(),
       'isVoid': isVoid,
+      'claimed': isClaimed,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -66,6 +74,7 @@ class BetOutput extends Equatable {
   const BetOutput.empty()
       : id = '',
         betAmount = 0,
+        winnings = 0,
         betDetails = '',
         transactionId = '',
         qrToken = '',
@@ -74,15 +83,19 @@ class BetOutput extends Equatable {
         betOn = FighterOutput.empty,
         pos = PosOutput.empty,
         isVoid = false,
+        isClaimed = false,
         createdAt = null,
         updatedAt = null;
 
   bool get isNotEmpty => this != const BetOutput.empty();
 
+  bool get isClaimable => betOn.id == fight.winnerId && winnings > 0 && !isClaimed;
+
   @override
   List<Object?> get props => [
         id,
         betAmount,
+        winnings,
         betDetails,
         transactionId,
         qrToken,
@@ -91,6 +104,7 @@ class BetOutput extends Equatable {
         betOn,
         pos,
         isVoid,
+        isClaimed,
         createdAt,
         updatedAt,
       ];

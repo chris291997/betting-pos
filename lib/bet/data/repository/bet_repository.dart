@@ -47,4 +47,9 @@ class BetRepository implements BetRepositoryInterface {
   Future<BetOutput> findBetDetailsByQrToken({required String qrToken}) async {
     return _betRemoteSource.findBetDetailsByQrToken(qrToken: qrToken);
   }
+
+  @override
+  Future<BetOutput> claimBet({required String transactionId}) async {
+    return _betRemoteSource.claimBet(transactionId: transactionId);
+  }
 }

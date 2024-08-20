@@ -33,4 +33,12 @@ class BetRemoteSource {
 
     return BetOutput.fromJson(response.data);
   }
+
+  Future<BetOutput> claimBet({required String transactionId}) async {
+    final response = await _manager.post(
+      '$betPath/$transactionId/claim',
+    );
+
+    return BetOutput.fromJson(response.data);
+  }
 }

@@ -7,4 +7,5 @@ abstract interface class BetRepositoryInterface {
   Future<FighterOutput> getFighter({required String fighterId});
   Future<BetOutput> findBetDetailsByTransactionId({required String transactionId});
   Future<BetOutput> findBetDetailsByQrToken({required String qrToken});
+  Future<BetOutput> claimBet({required String transactionId});
 }
