@@ -31,6 +31,7 @@ class _MobileScannerControllerHookState
     extends HookState<MobileScannerController, _MobileScannerControllerHook> {
   late final controller = MobileScannerController(
     formats: hook.formats ?? const [BarcodeFormat.qrCode],
+    autoStart: true,
   );
 
   @override

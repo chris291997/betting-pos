@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:bet_pos/bet/presentation/bloc/bet_details_bloc.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
 import 'package:bet_pos/bet/presentation/screen/claim_bet_screen.dart';
@@ -8,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+
+
+
 
 class QrCodeScannerScreen extends HookWidget {
   const QrCodeScannerScreen({super.key});
@@ -32,55 +34,66 @@ class QrCodeScannerScreen extends HookWidget {
           return SizedBox(
             width: constraints.maxWidth,
             height: constraints.maxWidth,
-            child: MobileScanner(
-              fit: BoxFit.cover,
-              controller: controller,
-              scanWindow: scanWindow,
-              onDetect: (barcodes) async {
-                final barcode = barcodes.barcodes.firstOrNull;
-                if (barcode != null) {
-                  if ((barcode.rawValue ?? '').isEmpty) return;
-
-                  final transactionId = barcode.rawValue;
-
-                  await controller.stop();
-
-                  context.read<BetDetailsBloc>().add(
-                        BetDetailsFetchedByTransactionId(transactionId ?? ''),
+            child: Stack(
+              children: [
+                MobileScanner(
+                  fit: BoxFit.cover,
+                  controller: controller,
+                  scanWindow: scanWindow,
+                  onDetect: (barcodes) async {
+                    final barcode = barcodes.barcodes.firstOrNull;
+                    if (barcode != null) {
+                      if ((barcode.rawValue ?? '').isEmpty) return;
+                
+                      final transactionId = barcode.rawValue;
+                
+                      await controller.stop();
+                
+                      context.read<BetDetailsBloc>().add(
+                            BetDetailsFetchedByTransactionId(transactionId ?? ''),
+                          );
+                
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (routeContext) {
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: context.read<BetDetailsBloc>(),
+                              ),
+                            ],
+                            child: const ClaimBetScreen(
+                              entryPoint: ClaimBetEntryPoint.scanned,
+                            ),
+                          );
+                        }),
                       );
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (routeContext) {
-                      return MultiBlocProvider(
-                        providers: [
-                          BlocProvider.value(
-                            value: context.read<BetDetailsBloc>(),
-                          ),
-                        ],
-                        child: const ClaimBetScreen(
-                          entryPoint: ClaimBetEntryPoint.scanned,
-                        ),
-                      );
-                    }),
-                  );
-                }
-              },
-              overlayBuilder: (context, widget) {
-                return CustomPaint(
-                  painter: _ScannerOverlay(scanWindow: scanWindow),
-                );
-              },
-              errorBuilder: (context, error, widget) {
-                print('Error: $error');
-                print('ErrorCode: ${error.errorCode}');
-                print('Error: ${error.errorDetails?.message}');
-                return Center(
-                  child: Text(
-                    error.toString(),
-                  ),
-                );
-              },
+                    }
+                  },
+                  // overlayBuilder: (context, widget) {
+                  //   return Center(
+                  //     child: CustomPaint(
+                  //       painter: _ScannerOverlay(scanWindow: scanWindow),
+                  //     ),
+                  //   );
+                  // },
+                  errorBuilder: (context, error, widget) {
+                    print('Error: $error');
+                    print('ErrorCode: ${error.errorCode}');
+                    print('Error: ${error.errorDetails?.message}');
+                    return Center(
+                      child: Text(
+                        error.toString(),
+                      ),
+                    );
+                  },
+                ),
+                // Center(
+                //   child: CustomPaint(
+                //           painter: _ScannerOverlay(scanWindow: scanWindow),
+                //     ),
+                // ),
+              ],
             ),
           );
         })
@@ -89,6 +102,142 @@ class QrCodeScannerScreen extends HookWidget {
     );
   }
 }
+
+
+// class QrCodeScannerScreen extends StatefulHookWidget {
+//   const QrCodeScannerScreen({super.key});
+
+//   @override
+//   _QrCodeScannerScreenState createState() => _QrCodeScannerScreenState();
+// }
+
+// class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> with WidgetsBindingObserver {
+//   final MobileScannerController controller = MobileScannerController(
+//     formats: [BarcodeFormat.qrCode],
+//     autoStart: false,
+//   );
+//   StreamSubscription<Object?>? _subscription;
+
+//   @override
+//   void initState() {
+//     controller.stop();
+//     super.initState();
+//     WidgetsBinding.instance.addObserver(this);
+  
+//     _subscription = controller.barcodes.listen(_handleBarcode);
+   
+//    controller.start();
+   
+//   }
+
+//   @override
+//   void didChangeAppLifecycleState(AppLifecycleState state) {
+//     if (!controller.value.isInitialized) {
+//       return;
+//     }
+
+//     switch (state) {
+//       case AppLifecycleState.detached:
+//       case AppLifecycleState.hidden:
+//       case AppLifecycleState.paused:
+//         controller.stop();
+//         _subscription?.cancel();
+//         _subscription = null;
+//         break;
+//       case AppLifecycleState.resumed:
+//         controller.start();
+//         _subscription = controller.barcodes.listen(_handleBarcode);
+//         break;
+//       case AppLifecycleState.inactive:
+//         break;
+//     }
+//   }
+
+//   void _handleBarcode(BarcodeCapture barcodes) async {
+//     final barcode = barcodes.barcodes.firstOrNull;
+//     if (barcode != null) {
+//       if ((barcode.rawValue ?? '').isEmpty) return;
+
+//       final transactionId = barcode.rawValue;
+
+//       await controller.stop();
+
+//       context.read<BetDetailsBloc>().add(
+//             BetDetailsFetchedByTransactionId(transactionId ?? ''),
+//           );
+
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(builder: (routeContext) {
+//           return MultiBlocProvider(
+//             providers: [
+//               BlocProvider.value(
+//                 value: context.read<BetDetailsBloc>(),
+//               ),
+//             ],
+//             child: const ClaimBetScreen(
+//               entryPoint: ClaimBetEntryPoint.scanned,
+//             ),
+//           );
+//         }),
+//       );
+//     }
+//   }
+
+//   @override
+//   void dispose() {
+//     WidgetsBinding.instance.removeObserver(this);
+//     _subscription?.cancel();
+//     controller.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+
+//     final scanWindow = Rect.fromCenter(
+//       center: MediaQuery.sizeOf(context).center(Offset.zero),
+//       width: 300,
+//       height: 300,
+//     );
+
+//     return BetScreenWrapper(
+//       appBarTitle: 'Scan QR Code',
+//       contentVerticalAlignment: MainAxisAlignment.center,
+//       content: [
+//         LayoutBuilder(builder: (context, constraints) {
+//           return SizedBox(
+//             width: constraints.maxWidth,
+//             height: constraints.maxWidth,
+//             child: MobileScanner(
+//               fit: BoxFit.cover,
+//               controller: controller,
+//               scanWindow: scanWindow,
+//               overlayBuilder: (context, widget) {
+//                 return Center(
+//                   child: CustomPaint(
+//                     painter: _ScannerOverlay(scanWindow: scanWindow),
+//                   ),
+//                 );
+//               },
+//               errorBuilder: (context, error, widget) {
+//                 print('Error: $error');
+//                 print('ErrorCode: ${error.errorCode}');
+//                 print('Error: ${error.errorDetails?.message}');
+//                 return Center(
+//                   child: Text(
+//                     error.toString(),
+//                   ),
+//                 );
+//               },
+//             ),
+//           );
+//         })
+//       ],
+//       nextButtons: const [],
+//     );
+//   }
+// }
 
 // class LifecycleObserver extends WidgetsBindingObserver {
 //   final MobileScannerController controller;
