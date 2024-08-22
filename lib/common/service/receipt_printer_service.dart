@@ -125,7 +125,7 @@ class ReceiptPrinterService {
                 ),
                 pw.SizedBox(height: 10),
                 pw.Text(
-                  'User Name: ${receiptDetails.userName}',
+                  'Cashier: ${receiptDetails.userName}',
                   style: pw.TextStyle(font: ttf, fontSize: 12),
                 ),
                 pw.SizedBox(height: 10),

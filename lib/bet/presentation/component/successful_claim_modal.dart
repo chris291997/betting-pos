@@ -11,21 +11,25 @@ void showSuccessClaimDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(
-              _rewardSVG,
-              height: 50,
-              width: 50,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Successfully Claimed',
-              style: context.textStyle.subtitle1,
-            ),
-          ],
+        content: SizedBox(
+          width: 300,
+          height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(
+                _rewardSVG,
+                height: 50,
+                width: 50,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Successfully Claimed',
+                style: context.textStyle.subtitle1,
+              ),
+            ],
+          ),
         ),
         actions: <Widget>[
           BetNextStepButton(

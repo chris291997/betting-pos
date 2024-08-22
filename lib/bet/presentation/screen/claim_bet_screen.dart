@@ -37,7 +37,7 @@ class _ClaimBetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ClaimBetBloc, ClaimBetState>(
+    return BlocConsumer<ClaimBetBloc, ClaimBetState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
           context.read<BetDetailsBloc>().add(
@@ -57,67 +57,69 @@ class _ClaimBetScreen extends StatelessWidget {
           );
         }
       },
-      child: BlocBuilder<BetDetailsBloc, BetDetailsState>(
-        builder: (context, state) {
-          final status = state.status;
-          final betOutput = state.betOutput;
-          final buttonState = betOutput.isClaimable
-              ? PrimaryButtonState.enabled
-              : status.isLoading
-                  ? PrimaryButtonState.loading
-                  : PrimaryButtonState.disabled;
+      builder: (context, claimState) {
+        return BlocBuilder<BetDetailsBloc, BetDetailsState>(
+          builder: (context, state) {
+            final status = state.status;
+            final betOutput = state.betOutput;
+            final buttonState = betOutput.isClaimable
+                ? PrimaryButtonState.enabled
+                : PrimaryButtonState.disabled;
 
-          return PopScope(
-            canPop: !status.isSuccess,
-            child: BetScreenWrapper(
-              appBarTitle: 'Claim Bet',
-              contentVerticalAlignment: status.isSuccess
-                  ? MainAxisAlignment.start
-                  : MainAxisAlignment.center,
-              content: [
-                if (status.isLoading) ...[
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                ] else if (status.isError) ...[
-                  const Center(
-                    child: Text('No Transaction Found'),
-                  )
-                ] else if (status.isSuccess) ...[
-                  const ReceiptDetailsView(),
-                ] else ...[
-                  const Center(
-                    child: Text('No Transaction Requested'),
-                  ),
-                ]
-              ],
-              nextButtons: [
-                if (status.isSuccess && state.betOutput.isNotEmpty) ...[
-                  BetNextStepButton(
-                    label: 'Claim',
-                    onPressed: () {
-                      context.read<ClaimBetBloc>().add(
-                            ClaimBetSubmitted(
-                              transactionId: betOutput.transactionId,
-                            ),
-                          );
-                    },
-                    state: buttonState,
-                  ),
+            return PopScope(
+              canPop: !status.isSuccess,
+              child: BetScreenWrapper(
+                appBarTitle: 'Claim Bet',
+                contentVerticalAlignment: status.isSuccess
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.center,
+                content: [
+                  if (status.isLoading) ...[
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  ] else if (status.isError) ...[
+                    const Center(
+                      child: Text('No Transaction Found'),
+                    )
+                  ] else if (status.isSuccess) ...[
+                    const ReceiptDetailsView(),
+                  ] else ...[
+                    const Center(
+                      child: Text('No Transaction Requested'),
+                    ),
+                  ]
                 ],
-              ],
-              onAppbarBackButtonPressed: () {
-                if (entryPoint.isSearched) {
-                  Navigator.pop(context);
-                } else {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          );
-        },
-      ),
+                nextButtons: [
+                  if (status.isSuccess && state.betOutput.isNotEmpty) ...[
+                    BetNextStepButton(
+                      label: 'Claim${betOutput.isClaimed ? 'ed' : ''}',
+                      onPressed: () {
+                        context.read<ClaimBetBloc>().add(
+                              ClaimBetSubmitted(
+                                transactionId: betOutput.transactionId,
+                              ),
+                            );
+                      },
+                      state: claimState.status.isLoading
+                          ? PrimaryButtonState.loading
+                          : buttonState,
+                    ),
+                  ],
+                ],
+                onAppbarBackButtonPressed: () {
+                  if (entryPoint.isSearched) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

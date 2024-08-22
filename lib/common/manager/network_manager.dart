@@ -25,6 +25,8 @@ class NetworkManager {
               final newRequest = await _httpService.fetch(error.requestOptions);
               return handler.resolve(newRequest); // Retry the request
             }
+          } else if (error.response?.statusMessage == 'Invalid refresh token') {
+            await _handleExpiredRefreshToken();
           }
 
           handler.reject(error);
@@ -73,5 +75,13 @@ class NetworkManager {
     }
 
     return accessToken;
+  }
+
+  Future<void> _handleExpiredRefreshToken() async {
+    // Clear tokens
+    await Future.wait([
+      _cacheService.remove(StorageKey.accessToken),
+      _cacheService.remove(StorageKey.refreshToken),
+    ]);
   }
 }

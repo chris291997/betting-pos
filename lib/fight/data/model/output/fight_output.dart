@@ -42,7 +42,7 @@ class FightOutput extends Equatable implements JsonSerializable {
       startTime: json.parseString('startTime'),
       isLocked: json.parseBool('isLocked'),
       winnerId: json.parseString('winnerId'),
-      fightStatus: FightStatus.parse(json.parseString('fightStatus')),
+      fightStatus: FightStatus.parse(json.parseString('status')),
       createdAt: json.parseString('createdAt'),
       updatedAt: json.parseString('updatedAt'),
     );

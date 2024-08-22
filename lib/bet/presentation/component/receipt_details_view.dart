@@ -125,7 +125,35 @@ class BetDetails extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const _QrCodeDisplay(),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: context.layout.largeSpacing),
+              child: Row(
+                mainAxisAlignment: betOutput.winnings > 0
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.center,
+                children: [
+                  if (betOutput.winnings > 0)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Winnings',
+                          style: context.textStyle.headline6,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          betOutput.winnings.toStringAsFixed(2),
+                          style: context.textStyle.headline5,
+                        ),
+                      ],
+                    ),
+                  const _QrCodeDisplay(),
+                ],
+              ),
+            ),
             const SizedBox(
               height: 30,
             ),
