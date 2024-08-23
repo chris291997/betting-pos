@@ -1,5 +1,6 @@
 import 'package:bet_pos/bet/data/di/bet_service_locator.dart';
 import 'package:bet_pos/bet/presentation/component/bet_next_step_button.dart';
+import 'package:bet_pos/common/service/receipt_printer_service.dart';
 import 'package:flutter/material.dart';
 
 class PrintReceiptButton extends StatelessWidget {
@@ -18,6 +19,8 @@ class PrintReceiptButton extends StatelessWidget {
         // await ReceiptPrinterService()
         //     .printReceiptUsingThermalPrinter(betOutput.toReceiptDetails());
         // print('End printing receipt');
+        ReceiptPrinterService.of(context, betOutput.toReceiptDetails())
+            .printReceiptUsingThermalPrinter();
       },
     );
   }

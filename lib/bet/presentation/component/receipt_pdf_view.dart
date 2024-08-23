@@ -17,8 +17,8 @@ class ReceiptPdfView extends StatelessWidget {
       height: 1000,
       child: PdfPreview(
         pdfFileName: 'receipt.pdf',
-        build: (format) => ReceiptPrinterService()
-            .generatePdfPreview(receiptDetails: betOutput.toReceiptDetails()),
+        build: (format) => ReceiptPrinterService.of(context, betOutput.toReceiptDetails())
+            .generatePdfPreview(),
         canDebug: false,
         dynamicLayout: false,
         canChangeOrientation: false,

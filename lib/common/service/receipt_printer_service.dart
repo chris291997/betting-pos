@@ -1,15 +1,26 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:printing/printing.dart';
 
 class ReceiptPrinterService {
-  ReceiptPrinterService();
+  static ReceiptPrinterService? _instance;
+  final BuildContext context;
+  final ReceiptDetails receiptDetails;
 
-  Future<List<int>> printReceiptUsingThermalPrinter(
-      ReceiptDetails receiptDetails) async {
+  ReceiptPrinterService._(this.context, this.receiptDetails);
+
+  static ReceiptPrinterService of(BuildContext context, ReceiptDetails receiptDetails) {
+    _instance ??= ReceiptPrinterService._(context, receiptDetails);
+    return _instance!;
+  }
+
+  Future<List<int>> generateThermalPrinterReadyReceipt() async {
+    try{
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm80, profile);
     List<int> bytes = [];
@@ -34,19 +45,19 @@ class ReceiptPrinterService {
     bytes += generator.feed(1);
     bytes += generator.text('Event Name: ${receiptDetails.eventName}');
     bytes += generator.feed(1);
-    bytes += generator.text('Event Date: ${receiptDetails.eventDate}');
+    bytes += generator.text('Event Date: ${receiptDetails.eventDate?.toString()}');
     bytes += generator.feed(1);
     bytes += generator.text('Location: ${receiptDetails.location}');
     bytes += generator.feed(1);
-    bytes += generator.text('Fight Number: ${receiptDetails.fightNumber}');
+    bytes += generator.text('Fight Number: ${receiptDetails.fightNumber.toString()}');
     bytes += generator.feed(1);
     bytes += generator.text('Bet On: ${receiptDetails.betOnName}');
     bytes += generator.feed(1);
-    bytes += generator.text('Bet Amount: ₱${receiptDetails.betAmount}');
+    bytes += generator.text('Bet Amount: P${receiptDetails.betAmount.toString()}');
     bytes += generator.feed(1);
     bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
     bytes += generator.feed(1);
-    bytes += generator.text('User Name: ${receiptDetails.userName}');
+    bytes += generator.text('Cashier: ${receiptDetails.userName}');
     bytes += generator.feed(1);
     bytes += generator.text('Created At: ${receiptDetails.createdAt}');
     bytes += generator.feed(2);
@@ -59,12 +70,22 @@ class ReceiptPrinterService {
 
     bytes += generator.cut();
     return bytes;
+    }catch(e){
+      if(context.mounted){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      }
+
+      return [];
+    }
   }
 
-  Future<Uint8List> generatePdfPreview(
-      {required ReceiptDetails receiptDetails}) async {
+  Future<Uint8List> generatePdfPreview() async {
     final pdf = pw.Document();
-
     final fontData =
         await rootBundle.load('assets/fonts/roboto/Roboto-Regular.ttf');
     final ttf = pw.Font.ttf(fontData);
@@ -147,12 +168,82 @@ class ReceiptPrinterService {
       ),
     );
 
-    return pdf.save();
+     return pdf.save();
   }
 
   Future<void> downloadPdf(Uint8List pdfData) async {
     await Printing.sharePdf(bytes: pdfData, filename: 'receipt_preview.pdf');
   }
+
+  Future<void> _bluetoothPermissionHandler() async{
+    final bool result = await PrintBluetoothThermal.isPermissionBluetoothGranted;
+    if(!result){
+      if(context.mounted){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enable bluetooth permission'),
+        ),
+      );
+      }
+    }
+  }
+
+
+  Future<void> _bluetoothEnabledHandler() async{
+    final bool result = await PrintBluetoothThermal.bluetoothEnabled;
+    if(!result){
+      if(context.mounted){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enable bluetooth'),
+        ),
+      );
+      }
+    }
+  }
+
+  Future<void> printReceiptUsingThermalPrinter()async {
+    await _bluetoothPermissionHandler();
+    await _bluetoothEnabledHandler();
+    try{
+       final List<BluetoothInfo> listResult = await PrintBluetoothThermal.pairedBluetooths;
+    
+    if(listResult.isEmpty) return;
+  if(context.mounted){
+
+    final deviceNames = listResult.map((e) => e.name).join(', ');
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+          content: Text(deviceNames),
+        ),
+      );
+  }
+
+
+     await PrintBluetoothThermal.connect(macPrinterAddress: listResult.first.macAdress);
+
+     bool conectionStatus = await PrintBluetoothThermal.connectionStatus;
+    if (conectionStatus) {
+
+      List<int> ticket = await generateThermalPrinterReadyReceipt();
+       await PrintBluetoothThermal.writeBytes(ticket);
+    } 
+    }catch(e){
+      if(context.mounted){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      }
+    }
+  
+
+  }
+
+
+
 }
 
 class ReceiptDetails extends Equatable {
