@@ -32,6 +32,7 @@ class _MobileScannerControllerHookState
   late final controller = MobileScannerController(
     formats: hook.formats ?? const [BarcodeFormat.qrCode],
     autoStart: true,
+    detectionTimeoutMs: 5000,
   );
 
   @override

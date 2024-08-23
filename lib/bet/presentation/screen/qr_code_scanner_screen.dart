@@ -18,11 +18,11 @@ class QrCodeScannerScreen extends HookWidget {
       formats: const [BarcodeFormat.qrCode],
     );
 
-    final scanWindow = Rect.fromCenter(
-      center: MediaQuery.sizeOf(context).center(Offset.zero),
-      width: 300,
-      height: 300,
-    );
+    // final scanWindow = Rect.fromCenter(
+    //   center: MediaQuery.sizeOf(context).center(Offset.zero),
+    //   width: 300,
+    //   height: 300,
+    // );
 
     return BetScreenWrapper(
       appBarTitle: 'Scan QR Code',
@@ -37,14 +37,14 @@ class QrCodeScannerScreen extends HookWidget {
                 MobileScanner(
                   fit: BoxFit.cover,
                   controller: controller,
-                  scanWindow: scanWindow,
+                  // scanWindow: scanWindow,
                   onDetect: (barcodes) async {
                     final barcode = barcodes.barcodes.firstOrNull;
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //       content: Text('Scanned: ${barcode?.rawValue ?? ' null'}'),
-                    //     ),
-                    //   );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Scanned: ${barcode?.rawValue ?? ' null'}'),
+                        ),
+                      );
 
                     if (barcode != null) {
                       if ((barcode.rawValue ?? '').isEmpty) return;
@@ -337,67 +337,67 @@ class QrCodeScannerScreen extends HookWidget {
 //   }
 // }
 
-// class _ScannerOverlay extends CustomPainter {
-//   const _ScannerOverlay({
-//     required this.scanWindow,
-//     // ignore: unused_element
-//     this.borderRadius = 12.0,
-//   });
+class _ScannerOverlay extends CustomPainter {
+  const _ScannerOverlay({
+    required this.scanWindow,
+    // ignore: unused_element
+    this.borderRadius = 12.0,
+  });
 
-//   final Rect scanWindow;
-//   final double borderRadius;
+  final Rect scanWindow;
+  final double borderRadius;
 
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     // TODO: use `Offset.zero & size` instead of Rect.largest
-//     // we need to pass the size to the custom paint widget
-//     final backgroundPath = Path()..addRect(Rect.largest);
+  @override
+  void paint(Canvas canvas, Size size) {
+    // TODO: use `Offset.zero & size` instead of Rect.largest
+    // we need to pass the size to the custom paint widget
+    final backgroundPath = Path()..addRect(Rect.largest);
 
-//     final cutoutPath = Path()
-//       ..addRRect(
-//         RRect.fromRectAndCorners(
-//           scanWindow,
-//           topLeft: Radius.circular(borderRadius),
-//           topRight: Radius.circular(borderRadius),
-//           bottomLeft: Radius.circular(borderRadius),
-//           bottomRight: Radius.circular(borderRadius),
-//         ),
-//       );
+    final cutoutPath = Path()
+      ..addRRect(
+        RRect.fromRectAndCorners(
+          scanWindow,
+          topLeft: Radius.circular(borderRadius),
+          topRight: Radius.circular(borderRadius),
+          bottomLeft: Radius.circular(borderRadius),
+          bottomRight: Radius.circular(borderRadius),
+        ),
+      );
 
-//     final backgroundPaint = Paint()
-//       ..color = Colors.black.withOpacity(0.5)
-//       ..style = PaintingStyle.fill
-//       ..blendMode = BlendMode.dstOut;
+    final backgroundPaint = Paint()
+      ..color = Colors.black.withOpacity(0.5)
+      ..style = PaintingStyle.fill
+      ..blendMode = BlendMode.dstOut;
 
-//     final backgroundWithCutout = Path.combine(
-//       PathOperation.difference,
-//       backgroundPath,
-//       cutoutPath,
-//     );
+    final backgroundWithCutout = Path.combine(
+      PathOperation.difference,
+      backgroundPath,
+      cutoutPath,
+    );
 
-//     final borderPaint = Paint()
-//       ..color = Colors.white
-//       ..style = PaintingStyle.stroke
-//       ..strokeWidth = 4.0;
+    final borderPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.0;
 
-//     final borderRect = RRect.fromRectAndCorners(
-//       scanWindow,
-//       topLeft: Radius.circular(borderRadius),
-//       topRight: Radius.circular(borderRadius),
-//       bottomLeft: Radius.circular(borderRadius),
-//       bottomRight: Radius.circular(borderRadius),
-//     );
+    final borderRect = RRect.fromRectAndCorners(
+      scanWindow,
+      topLeft: Radius.circular(borderRadius),
+      topRight: Radius.circular(borderRadius),
+      bottomLeft: Radius.circular(borderRadius),
+      bottomRight: Radius.circular(borderRadius),
+    );
 
-//     // First, draw the background,
-//     // with a cutout area that is a bit larger than the scan window.
-//     // Finally, draw the scan window itself.
-//     canvas.drawPath(backgroundWithCutout, backgroundPaint);
-//     canvas.drawRRect(borderRect, borderPaint);
-//   }
+    // First, draw the background,
+    // with a cutout area that is a bit larger than the scan window.
+    // Finally, draw the scan window itself.
+    canvas.drawPath(backgroundWithCutout, backgroundPaint);
+    canvas.drawRRect(borderRect, borderPaint);
+  }
 
-//   @override
-//   bool shouldRepaint(_ScannerOverlay oldDelegate) {
-//     return scanWindow != oldDelegate.scanWindow ||
-//         borderRadius != oldDelegate.borderRadius;
-//   }
-// }
+  @override
+  bool shouldRepaint(_ScannerOverlay oldDelegate) {
+    return scanWindow != oldDelegate.scanWindow ||
+        borderRadius != oldDelegate.borderRadius;
+  }
+}
