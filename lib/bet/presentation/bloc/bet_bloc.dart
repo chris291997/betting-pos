@@ -66,7 +66,6 @@ class BetBloc extends Bloc<BetEvent, BetState> {
         ),
       );
     } catch (e) {
-      print(e.toString());
       emit(state.copyWith(status: BetStatus.error));
     }
   }

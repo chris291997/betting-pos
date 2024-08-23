@@ -18,10 +18,8 @@ class ConfirmBetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<BetBloc, BetState>(
       listener: (context, state) {
-        print('Bet State: ${state.status}');
         if (state.status.isSuccess) {
           context.read<BetBloc>().add(BetInitialized());
-          print('Bet Submitted');
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -62,7 +60,6 @@ class ConfirmBetScreen extends StatelessWidget {
                   : PrimaryButtonState.enabled,
               onPressed: () {
                 context.read<BetBloc>().add(BetSubmitted());
-                print('tapped');
               },
             ),
           ],

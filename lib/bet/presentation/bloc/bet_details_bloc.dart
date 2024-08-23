@@ -30,7 +30,6 @@ class BetDetailsBloc extends Bloc<BetDetailsEvent, BetDetailsState> {
 
       emit(state.copyWith(status: BetDetailsStatus.success, betOutput: result));
     } catch (e) {
-      print(e.toString());
       emit(state.copyWith(status: BetDetailsStatus.error));
     }
   }

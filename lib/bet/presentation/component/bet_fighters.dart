@@ -62,8 +62,6 @@ class _FighterCard extends StatelessWidget {
             builder: (context, state) {
               final fighter = state.fighter;
 
-              print('isSelected: ${betState.input.betOn.id == fighter.id}');
-
               if (state.status.isLoading) {
                 return const _CardShimmer();
               }

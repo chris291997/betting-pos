@@ -51,7 +51,6 @@ class BetInput extends Equatable {
 
   bool get hasEmptyAttribute {
     final json = toJson();
-    print(json);
     return json.values.any((value) => value == '' || value == 0);
   }
 
