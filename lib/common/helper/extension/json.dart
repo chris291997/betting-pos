@@ -16,7 +16,16 @@ extension JsonX on Map<String, dynamic> {
   }
 
   double? tryParseDouble(String key) {
-    return this[key] as double?;
+     final value = this[key];
+     if (value is double) {
+    return value;
+      } else if (value is int) {
+    return value.toDouble();
+      } else if (value is String) {
+    return double.tryParse(value);
+        } else {
+       return null;
+       }
   }
 
   double parseDouble(String key) {
