@@ -40,11 +40,11 @@ class QrCodeScannerScreen extends HookWidget {
                   // scanWindow: scanWindow,
                   onDetect: (barcodes) async {
                     final barcode = barcodes.barcodes.firstOrNull;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Scanned: ${barcode?.rawValue ?? ' null'}'),
-                        ),
-                      );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text('Scanned: ${barcode?.rawValue ?? ' null'}'),
+                    //     ),
+                    //   );
 
                     if (barcode != null) {
                       if ((barcode.rawValue ?? '').isEmpty) return;

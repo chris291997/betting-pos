@@ -63,7 +63,7 @@ class ReceiptPrinterService {
     bytes += generator.feed(2);
 
     // Print QR code
-    bytes += generator.qrcode(receiptDetails.transactionId);
+    bytes += generator.qrcode(receiptDetails.transactionId, size: QRSize.size6);
 
     // Add bottom padding
     bytes += generator.feed(4);

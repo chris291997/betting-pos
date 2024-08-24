@@ -46,10 +46,18 @@ final router = GoRouter(
     ),
   ],
   redirect: (context, state) async {
-    final accountBloc = context.read<AccountBloc>();
-    final accessToken = await cacheService.read(StorageKey.accessToken);
+      final accountBloc = context.read<AccountBloc>();
+      final accessToken = await cacheService.read(StorageKey.accessToken);
 
-    if (accessToken != null) {
+      // Check if the current date is greater than September 30, 2024
+      final currentDate = DateTime.now();
+      final cutoffDate = DateTime(2024, 9, 30);
+
+      if (currentDate.isAfter(cutoffDate)) {
+        return LoginScreen.routeName;
+      }
+
+     if (accessToken != null) {
       final user = await cacheService.read(StorageKey.loggedUser);
       if (user == null) {
         return LoginScreen.routeName;

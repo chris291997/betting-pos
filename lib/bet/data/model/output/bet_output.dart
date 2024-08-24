@@ -91,6 +91,8 @@ class BetOutput extends Equatable {
 
   bool get isClaimable => betOn.id == fight.winnerId && winnings > 0 && !isClaimed;
 
+  FighterType get betOnType => fight.walaId == betOn.id ? FighterType.wala : FighterType.meron;
+
   @override
   List<Object?> get props => [
         id,
@@ -118,7 +120,8 @@ extension BetOutputMapper on BetOutput {
       eventDate: event.eventDate?.toIso8601String(),
       location: event.location,
       fightNumber: fight.fightNumber,
-      betOnName: betOn.name,
+      // betOnName: betOn.name,
+      betOnName: betOnType.name.toUpperCase(),
       betAmount: betAmount,
       posNumber: pos.posNumber,
       userName: pos.user.username,
