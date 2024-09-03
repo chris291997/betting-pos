@@ -6,6 +6,7 @@ import 'package:bet_pos/fight/data/di/fight_service_locator.dart';
 import 'package:bet_pos/fighter/data/di/fighter_service_locator.dart';
 import 'package:bet_pos/user/data/di/user_service_locator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 part '../data_source/remote/bet_remote_source.dart';
 part '../model/input/bet_input.dart';

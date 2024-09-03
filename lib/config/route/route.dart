@@ -10,6 +10,7 @@ import 'package:bet_pos/user/presentation/bloc/account_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 // final _eventNavigatorKey = GlobalKey<NavigatorState>();
@@ -50,25 +51,33 @@ final router = GoRouter(
       final accessToken = await cacheService.read(StorageKey.accessToken);
 
       // Check if the current date is greater than September 30, 2024
-      final currentDate = DateTime.now();
-      final cutoffDate = DateTime(2024, 9, 30);
+      // final currentDate = DateTime.now();
+      // final cutoffDate = DateTime(2024, 9, 30);
 
-      if (currentDate.isAfter(cutoffDate)) {
-        return LoginScreen.routeName;
-      }
+      // if (currentDate.isAfter(cutoffDate)) {
+      //   return LoginScreen.routeName;
+      // }
 
      if (accessToken != null) {
-      final user = await cacheService.read(StorageKey.loggedUser);
-      if (user == null) {
-        return LoginScreen.routeName;
+      if (!JwtDecoder.isExpired(accessToken)) {
+        final user = await cacheService.read(StorageKey.loggedUser);
+        if (user == null) {
+          return LoginScreen.routeName;
+        }
+
+        final userOutput = UserOutput.fromJson(jsonDecode(user));
+
+        accountBloc.add(AccountEventUserSet(userOutput));
+
+        return null;
       }
-
-      final userOutput = UserOutput.fromJson(jsonDecode(user));
-
-      accountBloc.add(AccountEventUserSet(userOutput));
-
-      return null;
     }
+
+    await Future.wait([
+      cacheService.remove(StorageKey.accessToken),
+      cacheService.remove(StorageKey.refreshToken),
+      cacheService.remove(StorageKey.loggedUser),
+    ]);
 
     return LoginScreen.routeName;
   },

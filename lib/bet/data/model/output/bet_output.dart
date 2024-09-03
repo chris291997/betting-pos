@@ -114,10 +114,17 @@ class BetOutput extends Equatable {
 
 extension BetOutputMapper on BetOutput {
   ReceiptDetails toReceiptDetails() {
+    final eventDateFormatted = event.eventDate != null
+        ? DateFormat('MM/dd/yyyy hh:mm:ss aa').format(event.eventDate!)
+        : null;
+    final createdAtFormatted = event.createdAt != null
+        ? DateFormat('MM/dd/yyyy hh:mm:ss aa').format(event.createdAt!)
+        : null;
+
     return ReceiptDetails(
       transactionId: transactionId,
       eventName: event.eventName,
-      eventDate: event.eventDate?.toIso8601String(),
+      eventDate: eventDateFormatted,
       location: event.location,
       fightNumber: fight.fightNumber,
       // betOnName: betOn.name,
@@ -125,7 +132,7 @@ extension BetOutputMapper on BetOutput {
       betAmount: betAmount,
       posNumber: pos.posNumber,
       userName: pos.user.username,
-      createdAt: createdAt?.toIso8601String() ?? '',
+      createdAt: createdAtFormatted?? '',
       qrToken: qrToken,
     );
   }

@@ -16,20 +16,18 @@ class NetworkManager {
           }
           handler.next(options);
         },
-        onError: (error, handler) async {
-          if (error.response?.statusCode == HttpStatus.unauthorized) {
+        onResponse: (response, handler) async {
+          if (response.statusCode == HttpStatus.unauthorized) {
             final refreshToken = await _refreshToken();
             if (refreshToken != null) {
-              _httpService.options.headers['Authorization'] =
+              response.requestOptions.headers['Authorization'] =
                   'Bearer $refreshToken';
-              final newRequest = await _httpService.fetch(error.requestOptions);
+              final newRequest = await _httpService.fetch(response.requestOptions);
               return handler.resolve(newRequest); // Retry the request
             }
-          } else if (error.response?.statusMessage == 'Invalid refresh token') {
-            await _handleExpiredRefreshToken();
           }
 
-          handler.reject(error);
+          handler.next(response);
         },
       ),
     );
@@ -77,11 +75,11 @@ class NetworkManager {
     return accessToken;
   }
 
-  Future<void> _handleExpiredRefreshToken() async {
-    // Clear tokens
-    await Future.wait([
-      _cacheService.remove(StorageKey.accessToken),
-      _cacheService.remove(StorageKey.refreshToken),
-    ]);
-  }
+  // Future<void> _handleExpiredRefreshToken() async {
+  //   // Clear tokens
+  //   await Future.wait([
+  //     _cacheService.remove(StorageKey.accessToken),
+  //     _cacheService.remove(StorageKey.refreshToken),
+  //   ]);
+  // }
 }

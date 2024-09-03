@@ -28,6 +28,13 @@ class ConfirmBetScreen extends StatelessWidget {
               ),
             ),
           );
+        }else if(state.status.isError){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error ?? 'An error occurred'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
         
       },

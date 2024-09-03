@@ -1,8 +1,10 @@
 import 'package:bet_pos/bet/data/di/bet_service_locator.dart';
+import 'package:bet_pos/common/util/dio_error_parser.dart';
 import 'package:bet_pos/event/data/di/event_service_locator.dart';
 import 'package:bet_pos/fight/data/di/fight_service_locator.dart';
 import 'package:bet_pos/fighter/data/di/fighter_service_locator.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
 part '../event/bet_event.dart';
@@ -65,8 +67,9 @@ class BetBloc extends Bloc<BetEvent, BetState> {
           betOutput: result,
         ),
       );
-    } catch (e) {
-      emit(state.copyWith(status: BetStatus.error));
+    } on DioException catch ( e) {
+     final errorMessage = DioErrorParser.handleError(e);
+      emit(state.copyWith(status: BetStatus.error, error: errorMessage));
     }
   }
 }
