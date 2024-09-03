@@ -4,7 +4,7 @@ import 'package:bet_pos/bet/presentation/bloc/claim_bet_bloc.dart';
 import 'package:bet_pos/bet/presentation/component/bet_next_step_button.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
 import 'package:bet_pos/bet/presentation/component/receipt_details_view.dart';
-import 'package:bet_pos/bet/presentation/component/successful_claim_modal.dart';
+import 'package:bet_pos/bet/presentation/screen/receipt_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,12 +43,29 @@ class _ClaimBetScreen extends StatelessWidget {
           context.read<BetDetailsBloc>().add(
                 BetDetailsInitial(),
               );
+
           context.read<BetDetailsBloc>().add(
                 BetDetailsFetchedByTransactionId(
                   state.betOutput.transactionId,
                 ),
               );
-          showSuccessClaimDialog(context);
+
+          context.read<ClaimBetBloc>().add(
+                const ClaimBetInitialized(),
+              );
+          // showSuccessClaimDialog(context);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ReceiptScreen(
+                betOutput: state.betOutput,
+              ),
+            ),
+          );
+          context.read<ClaimBetBloc>().add(
+                const ClaimBetInitialized(),
+              );
         } else if (state.status.isError) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

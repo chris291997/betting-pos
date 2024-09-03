@@ -27,4 +27,9 @@ class EventRepository implements EventRepositoryInterface {
   Future<List<EventOutput>> getEvents() async {
     return _remoteSource.getEvents();
   }
+
+  @override
+  Future<CurrentEventAndFightOutput> getCurrentEvent() async {
+    return _remoteSource.getCurrentEvent();
+  }
 }

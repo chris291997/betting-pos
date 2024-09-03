@@ -14,6 +14,8 @@ class BetOutput extends Equatable {
     required this.pos,
     required this.isVoid,
     required this.isClaimed,
+    required this.claimedBy,
+    this.claimedAt,
     this.createdAt,
     this.updatedAt,
   });
@@ -30,6 +32,8 @@ class BetOutput extends Equatable {
   final PosOutput pos;
   final bool isVoid;
   final bool isClaimed;
+  final UserOutput claimedBy;
+  final DateTime? claimedAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -37,7 +41,7 @@ class BetOutput extends Equatable {
     return BetOutput(
       id: json.parseString('id'),
       betAmount: json.parseDouble('betAmount'),
-      winnings: json.parseDouble('winnings'),
+      winnings: double.tryParse(json.parseString('winnings')) ?? 0.0,
       betDetails: json.parseString('betDetails'),
       transactionId: json.parseString('transactionId'),
       qrToken: json.parseString('qrToken'),
@@ -47,6 +51,9 @@ class BetOutput extends Equatable {
       pos: PosOutput.fromJson(json['pos'] as Map<String, dynamic>),
       isVoid: json.parseBool('isVoid'),
       isClaimed: json.parseBool('claimed'),
+      claimedBy:
+          UserOutput.fromJson(json['claimedBy'] as Map<String, dynamic>? ?? {}),
+      claimedAt: json.parseDateTime('claimedAt'),
       createdAt: json.parseDateTime('createdAt'),
       updatedAt: json.parseDateTime('updatedAt'),
     );
@@ -84,14 +91,18 @@ class BetOutput extends Equatable {
         pos = PosOutput.empty,
         isVoid = false,
         isClaimed = false,
+        claimedBy = UserOutput.empty,
+        claimedAt = null,
         createdAt = null,
         updatedAt = null;
 
   bool get isNotEmpty => this != const BetOutput.empty();
 
-  bool get isClaimable => betOn.id == fight.winnerId && winnings > 0 && !isClaimed;
+  bool get isClaimable =>
+      betOn.id == fight.winnerId && winnings > 0 && !isClaimed;
 
-  FighterType get betOnType => fight.walaId == betOn.id ? FighterType.wala : FighterType.meron;
+  FighterType get betOnType =>
+      fight.walaId == betOn.id ? FighterType.wala : FighterType.meron;
 
   @override
   List<Object?> get props => [
@@ -107,6 +118,8 @@ class BetOutput extends Equatable {
         pos,
         isVoid,
         isClaimed,
+        claimedBy,
+        claimedAt,
         createdAt,
         updatedAt,
       ];
@@ -121,6 +134,10 @@ extension BetOutputMapper on BetOutput {
         ? DateFormat('MM/dd/yyyy hh:mm:ss aa').format(event.createdAt!)
         : null;
 
+    final claimedAtFormatted = claimedAt != null
+        ? DateFormat('MM/dd/yyyy hh:mm:ss aa').format(claimedAt!)
+        : null;
+
     return ReceiptDetails(
       transactionId: transactionId,
       eventName: event.eventName,
@@ -130,10 +147,13 @@ extension BetOutputMapper on BetOutput {
       // betOnName: betOn.name,
       betOnName: betOnType.name.toUpperCase(),
       betAmount: betAmount,
+      winnings: winnings.toString(),
       posNumber: pos.posNumber,
       userName: pos.user.username,
-      createdAt: createdAtFormatted?? '',
+      createdAt: createdAtFormatted ?? '',
       qrToken: qrToken,
+      claimedBy: claimedBy.username,
+      claimedAt: claimedAtFormatted ?? '',
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:bet_pos/bet/presentation/screen/search_bet_screen.dart';
-import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen.dart';
+import 'package:bet_pos/bet/presentation/screen/select_to_bet_screen_v2.dart';
 import 'package:bet_pos/common/component/appbar/main_appbar.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
 import 'package:bet_pos/common/theme/screen_size/screen_breakpoint.dart';
@@ -31,7 +31,7 @@ class PosDashboard extends StatelessWidget {
             children: [
               PrimaryButton(
                 onPressed: () {
-                  context.push(SelectToBetScreen.routeName);
+                  context.push(SelectToBetScreenV2.routeName);
                 },
                 labelText: 'Place Bet',
               ),

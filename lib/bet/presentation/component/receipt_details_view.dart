@@ -1,6 +1,6 @@
 import 'package:bet_pos/bet/data/di/bet_service_locator.dart';
 import 'package:bet_pos/bet/presentation/bloc/bet_details_bloc.dart';
-import 'package:bet_pos/bet/presentation/component/select_bet_card.dart';
+import 'package:bet_pos/bet/presentation/component/select_bet_card_v2.dart';
 import 'package:bet_pos/common/theme/theme.dart';
 import 'package:bet_pos/fighter/data/di/fighter_service_locator.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +126,8 @@ class BetDetails extends StatelessWidget {
               height: 10,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: context.layout.largeSpacing),
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.layout.largeSpacing),
               child: Row(
                 mainAxisAlignment: betOutput.winnings > 0
                     ? MainAxisAlignment.spaceBetween
@@ -179,8 +180,7 @@ class _BetOnCard extends StatelessWidget {
             ? FighterType.wala
             : FighterType.meron;
 
-        return SelectBetCard(
-          fighterOutput: fighterOutput,
+        return SelectBetCardV2(
           fighterType: fighterType,
           isSelected: false,
           onTap: () {},

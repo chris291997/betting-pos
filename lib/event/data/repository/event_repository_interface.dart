@@ -6,4 +6,5 @@ abstract interface class EventRepositoryInterface {
   Future<EventOutput> updateEvent(
       {required String eventId, required UpdateEventInput input});
   Future<List<EventOutput>> getEvents();
+  Future<CurrentEventAndFightOutput> getCurrentEvent();
 }

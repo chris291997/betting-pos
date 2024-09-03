@@ -6,6 +6,8 @@ class EventRemoteSource {
   final NetworkManager _manager;
 
   static const String eventPath = '/events';
+  static const String fight = '/fight';
+  static const String currentEvent = '/current';
 
   Future<EventOutput> createEvent({required CreateEventInput input}) async {
     final response = await _manager.post(
@@ -50,5 +52,13 @@ class EventRemoteSource {
     return (response.data as List)
         .map((e) => EventOutput.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<CurrentEventAndFightOutput> getCurrentEvent() async {
+    final response = await _manager.get(
+      '$eventPath$fight$currentEvent',
+    );
+
+    return CurrentEventAndFightOutput.fromJson(response.data);
   }
 }

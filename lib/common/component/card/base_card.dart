@@ -7,8 +7,10 @@ class BaseCard extends StatelessWidget {
     required this.content,
     required this.onTap,
     this.enableGradientBorder = false,
+    this.color = Colors.white,
   });
 
+  final Color color;
   final Widget content;
   final void Function() onTap;
   final bool enableGradientBorder;
@@ -29,6 +31,7 @@ class BaseCard extends StatelessWidget {
               )
             : null,
         child: Card(
+          color: color,
           margin: const EdgeInsets.all(8.0),
           child: Padding(
             padding: const EdgeInsets.all(16.0),

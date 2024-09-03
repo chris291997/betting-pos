@@ -18,7 +18,8 @@ class BetRemoteSource {
     return BetOutput.fromJson(response.data);
   }
 
-  Future<BetOutput> findBetDetailsByTransactionId({required String transactionId}) async {
+  Future<BetOutput> findBetDetailsByTransactionId(
+      {required String transactionId}) async {
     final response = await _manager.get(
       '$betPath/$transactionsPath/$transactionId',
     );

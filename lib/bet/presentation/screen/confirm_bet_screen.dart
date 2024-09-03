@@ -2,7 +2,7 @@ import 'package:bet_pos/bet/presentation/bloc/bet_bloc.dart';
 import 'package:bet_pos/bet/presentation/component/bet_next_step_button.dart';
 import 'package:bet_pos/bet/presentation/component/bet_payment_details.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
-import 'package:bet_pos/bet/presentation/component/betted_fighter.dart';
+import 'package:bet_pos/bet/presentation/component/betted_fighter_v2.dart';
 import 'package:bet_pos/bet/presentation/component/payment_option.dart';
 import 'package:bet_pos/bet/presentation/screen/receipt_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
@@ -28,7 +28,7 @@ class ConfirmBetScreen extends StatelessWidget {
               ),
             ),
           );
-        }else if(state.status.isError){
+        } else if (state.status.isError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error ?? 'An error occurred'),
@@ -36,13 +36,13 @@ class ConfirmBetScreen extends StatelessWidget {
             ),
           );
         }
-        
       },
       builder: (context, state) {
         return BetScreenWrapper(
           appBarTitle: 'Payment',
           content: const [
-            BettedFighterCard(),
+            // BettedFighterCard(),
+            Center(child: BettedFighterCardV2()),
             SizedBox(
               height: 30,
             ),

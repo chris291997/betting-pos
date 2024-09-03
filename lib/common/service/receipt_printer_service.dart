@@ -14,61 +14,80 @@ class ReceiptPrinterService {
 
   ReceiptPrinterService._(this.context, this.receiptDetails);
 
-  static ReceiptPrinterService of(BuildContext context, ReceiptDetails receiptDetails) {
+  static ReceiptPrinterService of(
+      BuildContext context, ReceiptDetails receiptDetails) {
     _instance ??= ReceiptPrinterService._(context, receiptDetails);
     return _instance!;
   }
 
   Future<List<int>> generateThermalPrinterReadyReceipt() async {
-    try{
-    final profile = await CapabilityProfile.load();
-    final generator = Generator(PaperSize.mm80, profile);
-    List<int> bytes = [];
+    try {
+      final profile = await CapabilityProfile.load();
+      final generator = Generator(PaperSize.mm80, profile);
+      List<int> bytes = [];
 
-    // Add top padding
-    bytes += generator.feed(2);
+      print('Receipt Details: $receiptDetails');
 
-    // Add header
-    bytes += generator.text(
-      'Official Receipt',
-      styles: const PosStyles(
-        align: PosAlign.center,
-        height: PosTextSize.size2,
-        width: PosTextSize.size2,
-        bold: true,
-      ),
-    );
-    bytes += generator.feed(2);
+      // Add top padding
+      bytes += generator.feed(2);
 
-    // Add receipt details
-    bytes += generator.text('Transaction ID: ${receiptDetails.transactionId}');
-    bytes += generator.text('Event Name: ${receiptDetails.eventName}');
-    bytes += generator.text('Event Date: ${receiptDetails.eventDate?.toString()}');
-    bytes += generator.text('Location: ${receiptDetails.location}');
-    bytes += generator.text('Fight Number: ${receiptDetails.fightNumber.toString()}');
-    bytes += generator.text('Bet On: ${receiptDetails.betOnName}');
-    bytes += generator.text('Bet Amount: P${receiptDetails.betAmount.toString()}');
-    bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
-    bytes += generator.text('Cashier: ${receiptDetails.userName}');
-    bytes += generator.text('Created At: ${receiptDetails.createdAt}');
-    bytes += generator.feed(2);
-
-    // Print QR code
-    bytes += generator.qrcode(receiptDetails.transactionId, size: QRSize.size6);
-
-    // Add bottom padding
-    bytes += generator.feed(2);
-
-    bytes += generator.cut();
-    return bytes;
-    }catch(e){
-      if(context.mounted){
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
+      // Add header
+      final header = receiptDetails.claimedBy.isEmpty
+          ? 'Official Receipt'
+          : 'Claimed Receipt';
+      bytes += generator.text(
+        header,
+        styles: const PosStyles(
+          align: PosAlign.center,
+          height: PosTextSize.size2,
+          width: PosTextSize.size2,
+          bold: true,
         ),
       );
+      bytes += generator.feed(2);
+
+      // Add receipt details
+      bytes +=
+          generator.text('Transaction ID: ${receiptDetails.transactionId}');
+      // bytes += generator.text('Event Name: ${receiptDetails.eventName}');
+      // bytes +=
+      //     generator.text('Event Date: ${receiptDetails.eventDate?.toString()}');
+      // bytes += generator.text('Location: ${receiptDetails.location}');
+
+      if (receiptDetails.claimedBy.isNotEmpty) {
+        bytes += generator.text('Claimed By: ${receiptDetails.claimedBy}');
+        bytes += generator.text('Claimed At: ${receiptDetails.claimedAt}');
+      }
+      bytes += generator
+          .text('Fight Number: ${receiptDetails.fightNumber.toString()}');
+      bytes += generator.text('Bet On: ${receiptDetails.betOnName}');
+      bytes +=
+          generator.text('Bet Amount: P${receiptDetails.betAmount.toString()}');
+      if (receiptDetails.claimedBy.isNotEmpty) {
+        bytes += generator.text('Winnings: P${receiptDetails.winnings}');
+      }
+      // bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
+      // bytes += generator.text('Cashier: ${receiptDetails.userName}');
+      bytes += generator.text('Created At: ${receiptDetails.createdAt}');
+      bytes += generator.feed(2);
+
+      // Print QR code
+      bytes +=
+          generator.qrcode(receiptDetails.transactionId, size: QRSize.size6);
+
+      // Add bottom padding
+      bytes += generator.feed(2);
+
+      bytes += generator.cut();
+      return bytes;
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
 
       return [];
@@ -80,72 +99,92 @@ class ReceiptPrinterService {
     final fontData =
         await rootBundle.load('assets/fonts/roboto/Roboto-Regular.ttf');
     final ttf = pw.Font.ttf(fontData);
+    print('Receipt Details: $receiptDetails');
     pdf.addPage(
       pw.Page(
         pageFormat: const PdfPageFormat(80 * PdfPageFormat.mm, double.infinity),
         build: (pw.Context context) {
+          final header = receiptDetails.claimedBy.isEmpty
+              ? 'Official Receipt'
+              : 'Claimed Receipt';
           return pw.Padding(
             padding:
-                const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 40),
+                const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(
-                  'Official Receipt',
+                  header,
                   style: pw.TextStyle(
-                      font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
+                      font: ttf, fontSize: 13, fontWeight: pw.FontWeight.bold),
                 ),
                 pw.SizedBox(height: 10),
                 pw.Text(
                   'Transaction ID: ${receiptDetails.transactionId}',
-                  style: pw.TextStyle(font: ttf),
+                  style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
                 // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Event Name: ${receiptDetails.eventName}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
-                ),
+                // pw.Text(
+                //   'Event Name: ${receiptDetails.eventName}',
+                //   style: pw.TextStyle(font: ttf, fontSize: 12),
+                // ),
+                // // pw.SizedBox(height: 10),
+                // pw.Text(
+                //   'Event Date: ${receiptDetails.eventDate}',
+                //   style: pw.TextStyle(font: ttf, fontSize: 12),
+                // ),
                 // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Event Date: ${receiptDetails.eventDate}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
-                ),
+                // pw.Text(
+                //   'Location: ${receiptDetails.location}',
+                //   style: pw.TextStyle(font: ttf, fontSize: 10),
+                // ),
                 // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Location: ${receiptDetails.location}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
-                ),
-                // pw.SizedBox(height: 10),
+                if (receiptDetails.claimedBy.isNotEmpty) ...[
+                  pw.Text(
+                    'Claimed By: ${receiptDetails.claimedBy}',
+                    style: pw.TextStyle(font: ttf, fontSize: 10),
+                  ),
+                  pw.Text(
+                    'Claimed At: ${receiptDetails.claimedAt}',
+                    style: pw.TextStyle(font: ttf, fontSize: 10),
+                  ),
+                ],
                 pw.Text(
                   'Fight Number: ${receiptDetails.fightNumber}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
+                  style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
                 // pw.SizedBox(height: 10),
                 pw.Text(
                   'Bet On: ${receiptDetails.betOnName}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
+                  style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
                 // pw.SizedBox(height: 10),
                 pw.Text(
                   'Bet Amount: ₱${receiptDetails.betAmount}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
+                  style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
+                if (receiptDetails.claimedBy.isNotEmpty) ...[
+                  pw.Text(
+                    'Winnings: ₱${receiptDetails.winnings}',
+                    style: pw.TextStyle(font: ttf, fontSize: 10),
+                  ),
+                ],
                 // pw.SizedBox(height: 10),
-                pw.Text(
-                  'POS Number: ${receiptDetails.posNumber}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
-                ),
-                // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Cashier: ${receiptDetails.userName}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
-                ),
+                // pw.Text(
+                //   'POS Number: ${receiptDetails.posNumber}',
+                //   style: pw.TextStyle(font: ttf, fontSize: 12),
+                // ),
+                // // pw.SizedBox(height: 10),
+                // pw.Text(
+                //   'Cashier: ${receiptDetails.userName}',
+                //   style: pw.TextStyle(font: ttf, fontSize: 12),
+                // ),
                 // pw.SizedBox(height: 10),
                 pw.Text(
                   'Created At: ${receiptDetails.createdAt}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12),
+                  style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
-                pw.SizedBox(height: 20),
+                pw.SizedBox(height: 10),
                 pw.BarcodeWidget(
                   data: receiptDetails.transactionId,
                   barcode: pw.Barcode.qrCode(),
@@ -159,82 +198,76 @@ class ReceiptPrinterService {
       ),
     );
 
-     return pdf.save();
+    return pdf.save();
   }
 
   Future<void> downloadPdf(Uint8List pdfData) async {
     await Printing.sharePdf(bytes: pdfData, filename: 'receipt_preview.pdf');
   }
 
-  Future<void> _bluetoothPermissionHandler() async{
-    final bool result = await PrintBluetoothThermal.isPermissionBluetoothGranted;
-    if(!result){
-      if(context.mounted){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enable bluetooth permission'),
-        ),
-      );
+  Future<void> _bluetoothPermissionHandler() async {
+    final bool result =
+        await PrintBluetoothThermal.isPermissionBluetoothGranted;
+    if (!result) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enable bluetooth permission'),
+          ),
+        );
       }
     }
   }
 
-
-  Future<void> _bluetoothEnabledHandler() async{
+  Future<void> _bluetoothEnabledHandler() async {
     final bool result = await PrintBluetoothThermal.bluetoothEnabled;
-    if(!result){
-      if(context.mounted){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enable bluetooth'),
-        ),
-      );
+    if (!result) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enable bluetooth'),
+          ),
+        );
       }
     }
   }
 
-  Future<void> printReceiptUsingThermalPrinter()async {
+  Future<void> printReceiptUsingThermalPrinter() async {
     await _bluetoothPermissionHandler();
     await _bluetoothEnabledHandler();
-    try{
-       final List<BluetoothInfo> listResult = await PrintBluetoothThermal.pairedBluetooths;
-    
-    if(listResult.isEmpty) return;
-  if(context.mounted){
+    try {
+      final List<BluetoothInfo> listResult =
+          await PrintBluetoothThermal.pairedBluetooths;
 
-    final deviceNames = listResult.map((e) => e.name).join(', ');
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-          content: Text(deviceNames),
-        ),
-      );
-  }
+      if (listResult.isEmpty) return;
+      if (context.mounted) {
+        final deviceNames = listResult.map((e) => e.name).join(', ');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(deviceNames),
+          ),
+        );
+      }
 
+      await PrintBluetoothThermal.connect(
+          macPrinterAddress: listResult.first.macAdress);
 
-     await PrintBluetoothThermal.connect(macPrinterAddress: listResult.first.macAdress);
-
-     bool conectionStatus = await PrintBluetoothThermal.connectionStatus;
-    if (conectionStatus) {
-
-      List<int> ticket = await generateThermalPrinterReadyReceipt();
-       await PrintBluetoothThermal.writeBytes(ticket);
-    } 
-    }catch(e){
-      if(context.mounted){
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      bool conectionStatus = await PrintBluetoothThermal.connectionStatus;
+      if (conectionStatus) {
+        List<int> ticket = await generateThermalPrinterReadyReceipt();
+        await PrintBluetoothThermal.writeBytes(ticket);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
-  
-
   }
-
-
-
 }
 
 class ReceiptDetails extends Equatable {
@@ -250,6 +283,9 @@ class ReceiptDetails extends Equatable {
     required this.posNumber,
     required this.userName,
     required this.createdAt,
+    required this.claimedBy,
+    required this.claimedAt,
+    required this.winnings,
   });
 
   final double betAmount;
@@ -263,6 +299,9 @@ class ReceiptDetails extends Equatable {
   final String posNumber;
   final String userName;
   final String createdAt;
+  final String claimedBy;
+  final String claimedAt;
+  final String winnings;
 
   ReceiptDetails copyWith({
     double? betAmount,
@@ -276,6 +315,9 @@ class ReceiptDetails extends Equatable {
     String? posNumber,
     String? userName,
     String? createdAt,
+    String? claimedBy,
+    String? claimedAt,
+    String? winnings,
   }) {
     return ReceiptDetails(
       betAmount: betAmount ?? this.betAmount,
@@ -289,6 +331,9 @@ class ReceiptDetails extends Equatable {
       posNumber: posNumber ?? this.posNumber,
       userName: userName ?? this.userName,
       createdAt: createdAt ?? this.createdAt,
+      claimedBy: claimedBy ?? this.claimedBy,
+      claimedAt: claimedAt ?? this.claimedAt,
+      winnings: winnings ?? this.winnings,
     );
   }
 
@@ -305,5 +350,8 @@ class ReceiptDetails extends Equatable {
         posNumber,
         userName,
         createdAt,
+        claimedBy,
+        claimedAt,
+        winnings,
       ];
 }
