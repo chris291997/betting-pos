@@ -28,21 +28,25 @@ class EventDetails extends HookWidget {
       builder: (context, state) {
         final currentEventAndFight = state.currentEventAndFight;
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Event Name: ${currentEventAndFight.currentEvent.eventName}',
-              style: context.textStyle.subtitle1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(width: 20),
-            Text(
-              'Fight #${currentEventAndFight.currentFight.fightNumber}',
-              style: context.textStyle.subtitle1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+        return SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                currentEventAndFight.currentEvent.eventName,
+                style: context.textStyle.subtitle1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Fight #${currentEventAndFight.currentFight.fightNumber}',
+                style: context.textStyle.subtitle1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         );
       },
     );

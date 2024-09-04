@@ -20,6 +20,7 @@ class ClaimBetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      lazy: false,
       create: (context) => ClaimBetBloc(betRepository),
       child: _ClaimBetScreen(
         entryPoint: entryPoint,
@@ -38,8 +39,8 @@ class _ClaimBetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClaimBetBloc, ClaimBetState>(
-      listener: (context, state) {
-        if (state.status.isSuccess) {
+      listener: (listenerContext, state) {
+        if (state.status.isSuccess && state.betOutput.isNotEmpty) {
           context.read<BetDetailsBloc>().add(
                 BetDetailsInitial(),
               );
@@ -50,9 +51,6 @@ class _ClaimBetScreen extends StatelessWidget {
                 ),
               );
 
-          context.read<ClaimBetBloc>().add(
-                const ClaimBetInitialized(),
-              );
           // showSuccessClaimDialog(context);
 
           Navigator.push(

@@ -8,7 +8,6 @@ import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:printing/printing.dart';
 
 class ReceiptPrinterService {
-  static ReceiptPrinterService? _instance;
   final BuildContext context;
   final ReceiptDetails receiptDetails;
 
@@ -16,8 +15,7 @@ class ReceiptPrinterService {
 
   static ReceiptPrinterService of(
       BuildContext context, ReceiptDetails receiptDetails) {
-    _instance ??= ReceiptPrinterService._(context, receiptDetails);
-    return _instance!;
+    return ReceiptPrinterService._(context, receiptDetails);
   }
 
   Future<List<int>> generateThermalPrinterReadyReceipt() async {
@@ -26,25 +24,23 @@ class ReceiptPrinterService {
       final generator = Generator(PaperSize.mm80, profile);
       List<int> bytes = [];
 
-      print('Receipt Details: $receiptDetails');
-
       // Add top padding
-      bytes += generator.feed(2);
+      bytes += generator.feed(1);
 
       // Add header
-      final header = receiptDetails.claimedBy.isEmpty
-          ? 'Official Receipt'
-          : 'Claimed Receipt';
-      bytes += generator.text(
-        header,
-        styles: const PosStyles(
-          align: PosAlign.center,
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-          bold: true,
-        ),
-      );
-      bytes += generator.feed(2);
+      // final header = receiptDetails.claimedBy.isEmpty
+      //     ? 'Official Receipt'
+      //     : 'Claimed Receipt';
+      // bytes += generator.text(
+      //   header,
+      //   styles: const PosStyles(
+      //     align: PosAlign.center,
+      //     height: PosTextSize.size2,
+      //     width: PosTextSize.size2,
+      //     bold: true,
+      //   ),
+      // );
+      // bytes += generator.feed(2);
 
       // Add receipt details
       bytes +=
@@ -68,7 +64,7 @@ class ReceiptPrinterService {
       }
       // bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
       // bytes += generator.text('Cashier: ${receiptDetails.userName}');
-      bytes += generator.text('Created At: ${receiptDetails.createdAt}');
+      bytes += generator.text('CreatedAt: ${receiptDetails.createdAt}');
       bytes += generator.feed(2);
 
       // Print QR code
@@ -76,7 +72,7 @@ class ReceiptPrinterService {
           generator.qrcode(receiptDetails.transactionId, size: QRSize.size6);
 
       // Add bottom padding
-      bytes += generator.feed(2);
+      bytes += generator.feed(1);
 
       bytes += generator.cut();
       return bytes;
@@ -99,26 +95,25 @@ class ReceiptPrinterService {
     final fontData =
         await rootBundle.load('assets/fonts/roboto/Roboto-Regular.ttf');
     final ttf = pw.Font.ttf(fontData);
-    print('Receipt Details: $receiptDetails');
     pdf.addPage(
       pw.Page(
         pageFormat: const PdfPageFormat(80 * PdfPageFormat.mm, double.infinity),
         build: (pw.Context context) {
-          final header = receiptDetails.claimedBy.isEmpty
-              ? 'Official Receipt'
-              : 'Claimed Receipt';
+          // final header = receiptDetails.claimedBy.isEmpty
+          //     ? 'Official Receipt'
+          //     : 'Claimed Receipt';
           return pw.Padding(
             padding:
                 const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text(
-                  header,
-                  style: pw.TextStyle(
-                      font: ttf, fontSize: 13, fontWeight: pw.FontWeight.bold),
-                ),
-                pw.SizedBox(height: 10),
+                // pw.Text(
+                //   header,
+                //   style: pw.TextStyle(
+                //       font: ttf, fontSize: 13, fontWeight: pw.FontWeight.bold),
+                // ),
+                // pw.SizedBox(height: 10),
                 pw.Text(
                   'Transaction ID: ${receiptDetails.transactionId}',
                   style: pw.TextStyle(font: ttf, fontSize: 10),

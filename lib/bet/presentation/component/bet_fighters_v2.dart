@@ -15,11 +15,11 @@ class BetFightersV2 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SelectBetCardV2(
-              fighterType: FighterType.wala,
-              isSelected: state.input.betOnByType.isWala,
+              fighterType: FighterType.meron,
+              isSelected: state.input.betOnByType.isMeron,
               onTap: () {
                 context.read<BetBloc>().add(
-                      const BetFighterSelectedByType(FighterType.wala),
+                      const BetFighterSelectedByType(FighterType.meron),
                     );
               },
             ),
@@ -27,11 +27,11 @@ class BetFightersV2 extends StatelessWidget {
               height: 10,
             ),
             SelectBetCardV2(
-              fighterType: FighterType.meron,
-              isSelected: state.input.betOnByType.isMeron,
+              fighterType: FighterType.wala,
+              isSelected: state.input.betOnByType.isWala,
               onTap: () {
                 context.read<BetBloc>().add(
-                      const BetFighterSelectedByType(FighterType.meron),
+                      const BetFighterSelectedByType(FighterType.wala),
                     );
               },
             ),
