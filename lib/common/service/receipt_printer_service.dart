@@ -113,7 +113,7 @@ class ReceiptPrinterService {
 
       if (isClaimedReceipt) {
         bytes +=
-            generator.text('Payout: P${receiptDetails.betAmount.toString()}',
+            generator.text('Payout: P${receiptDetails.winnings}',
                 styles: const PosStyles(
                   align: PosAlign.left,
                   bold: true,
@@ -216,7 +216,7 @@ class ReceiptPrinterService {
                 pw.SizedBox(height: 10),
                 if (isClaimedReceipt) ...[
                   pw.Text(
-                    'Payout: ₱${receiptDetails.betAmount}',
+                    'Payout: ₱${receiptDetails.winnings}',
                     style: pw.TextStyle(
                       font: ttf,
                       fontSize: isClaimedReceipt ? 10 : 12,
