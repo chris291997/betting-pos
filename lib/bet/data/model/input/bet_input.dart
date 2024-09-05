@@ -91,5 +91,6 @@ class BetInput extends Equatable {
         // event,
         // betOn,
         betOnByType,
+        currentEventAndFight,
       ];
 }

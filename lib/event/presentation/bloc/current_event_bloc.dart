@@ -9,10 +9,18 @@ part '../state/current_event_state.dart';
 
 class CurrentEventBloc extends Bloc<CurrentEventEvent, CurrentEventState> {
   CurrentEventBloc(this._eventRepository) : super(const CurrentEventState()) {
+    on<CurrentEventInitialized>(_onCurrentEventInitialized);
     on<CurrentEventRequested>(_onCurrentEventRequested);
   }
 
   final EventRepositoryInterface _eventRepository;
+
+  void _onCurrentEventInitialized(
+    CurrentEventInitialized event,
+    Emitter<CurrentEventState> emit,
+  ) {
+    emit(state.copyWith(status: CurrentEventStatus.initial));
+  }
 
   void _onCurrentEventRequested(
     CurrentEventRequested event,

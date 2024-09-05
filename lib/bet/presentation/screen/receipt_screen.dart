@@ -9,14 +9,17 @@ class ReceiptScreen extends StatelessWidget {
   const ReceiptScreen({
     super.key,
     required this.betOutput,
+    required this.onDonePressed,
   });
 
   final BetOutput betOutput;
+  final Function() onDonePressed;
 
   @override
   Widget build(BuildContext context) {
     return BetScreenWrapper(
       displayAppBar: false,
+      canPop: false,
       content: [
         ReceiptPdfView(
           betOutput: betOutput,
@@ -27,7 +30,9 @@ class ReceiptScreen extends StatelessWidget {
           betOutput: betOutput,
         ),
         const SizedBox(height: 10),
-        const DoneButton(),
+        DoneButton(
+          onDonePressed: onDonePressed,
+        ),
       ],
       onAppbarBackButtonPressed: () {},
     );

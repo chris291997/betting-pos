@@ -250,7 +250,9 @@ class ReceiptPrinterService {
       bool conectionStatus = await PrintBluetoothThermal.connectionStatus;
       if (conectionStatus) {
         List<int> ticket = await generateThermalPrinterReadyReceipt();
-        await PrintBluetoothThermal.writeBytes(ticket);
+        if (ticket.isNotEmpty) {
+          await PrintBluetoothThermal.writeBytes(ticket);
+        }
       }
     } catch (e) {
       if (context.mounted) {

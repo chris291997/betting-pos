@@ -6,6 +6,7 @@ import 'package:bet_pos/bet/presentation/component/betted_fighter_v2.dart';
 import 'package:bet_pos/bet/presentation/component/payment_option.dart';
 import 'package:bet_pos/bet/presentation/screen/receipt_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
+import 'package:bet_pos/event/presentation/bloc/current_event_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,12 +20,18 @@ class ConfirmBetScreen extends StatelessWidget {
     return BlocConsumer<BetBloc, BetState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          context.read<BetBloc>().add(BetInitialized());
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ReceiptScreen(
+              builder: (pageContext) => ReceiptScreen(
                 betOutput: state.betOutput,
+                onDonePressed: () {
+                  context.read<BetBloc>().add(BetInitialized());
+                  context.read<CurrentEventBloc>()
+                    ..add(const CurrentEventInitialized())
+                    ..add(const CurrentEventRequested());
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
               ),
             ),
           );

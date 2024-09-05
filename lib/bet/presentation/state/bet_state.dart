@@ -33,7 +33,6 @@ class BetState extends Equatable {
         betOutput = const BetOutput.empty(),
         error = null;
 
-
   @override
   List<Object?> get props => [
         status,

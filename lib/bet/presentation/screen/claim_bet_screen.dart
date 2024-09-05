@@ -6,8 +6,10 @@ import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
 import 'package:bet_pos/bet/presentation/component/receipt_details_view.dart';
 import 'package:bet_pos/bet/presentation/screen/receipt_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
+import 'package:bet_pos/dashboard/presentation/screen/pos_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ClaimBetScreen extends StatelessWidget {
   const ClaimBetScreen({
@@ -58,6 +60,10 @@ class _ClaimBetScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => ReceiptScreen(
                 betOutput: state.betOutput,
+                onDonePressed: () {
+                  context.go(PosDashboard.routeName);
+                  // Navigator.of(context).popUntil((route) => route.isFirst);
+                },
               ),
             ),
           );

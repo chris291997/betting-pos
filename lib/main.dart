@@ -1,3 +1,4 @@
+import 'package:bet_pos/common/service/device_info_service.dart';
 import 'package:bet_pos/config/route/route.dart';
 import 'package:bet_pos/firebase_options.dart';
 import 'package:bet_pos/user/data/di/user_service_locator.dart';
@@ -17,6 +18,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await DeviceInfoService.init();
 
   GoRouter.optionURLReflectsImperativeAPIs = true;
 

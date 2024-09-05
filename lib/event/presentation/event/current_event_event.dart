@@ -7,6 +7,10 @@ sealed class CurrentEventEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class CurrentEventInitialized extends CurrentEventEvent {
+  const CurrentEventInitialized();
+}
+
 class CurrentEventRequested extends CurrentEventEvent {
   const CurrentEventRequested();
 }
