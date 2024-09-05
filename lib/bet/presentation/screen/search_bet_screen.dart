@@ -6,6 +6,7 @@ import 'package:bet_pos/bet/presentation/screen/claim_bet_screen.dart';
 import 'package:bet_pos/common/component/textfield/primary_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
 class SearchBetScreen extends StatelessWidget {
@@ -23,11 +24,13 @@ class SearchBetScreen extends StatelessWidget {
   }
 }
 
-class _SearchBetScreen extends StatelessWidget {
+class _SearchBetScreen extends HookWidget {
   const _SearchBetScreen();
 
   @override
   Widget build(BuildContext context) {
+    final searchController = useTextEditingController();
+
     return BetScreenWrapper(
       appBarTitle: 'Transaction Details',
       contentVerticalAlignment: MainAxisAlignment.center,
@@ -36,6 +39,7 @@ class _SearchBetScreen extends StatelessWidget {
       ],
       nextButtons: [
         PrimarySearchBar(
+          searchController: searchController,
           hintText: 'Enter Transaction ID',
           onSearch: (id) {
             if (id.isEmpty) return;
@@ -43,6 +47,7 @@ class _SearchBetScreen extends StatelessWidget {
             context.read<BetDetailsBloc>().add(
                   BetDetailsFetchedByTransactionId(id),
                 );
+            searchController.clear();
 
             Navigator.push(
               context,

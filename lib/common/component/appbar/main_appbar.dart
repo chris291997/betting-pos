@@ -15,6 +15,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: 50,
       leading: showBackButton
           ? IconButton(
               icon: const Icon(

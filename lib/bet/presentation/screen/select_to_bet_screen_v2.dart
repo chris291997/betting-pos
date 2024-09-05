@@ -4,7 +4,6 @@ import 'package:bet_pos/bet/presentation/component/bet_amount_form_field_v2.dart
 import 'package:bet_pos/bet/presentation/component/bet_continue_button.dart';
 import 'package:bet_pos/bet/presentation/component/bet_fighters_v2.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
-import 'package:bet_pos/bet/presentation/component/event_details.dart';
 import 'package:bet_pos/common/theme/theme.dart';
 import 'package:bet_pos/event/data/di/event_service_locator.dart';
 import 'package:bet_pos/event/presentation/bloc/current_event_bloc.dart';
@@ -56,15 +55,15 @@ class SelectToBetScreenV2 extends StatelessWidget {
                               Text(state.errorMessage ?? 'An error occurred')),
                     ]
                   : [
-                      const SizedBox(height: 20),
-                      Text('Bet Details', style: context.textStyle.headline5),
-                      const SizedBox(height: 30),
-                      const EventDetails(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 5),
+                      Text('Bet Details', style: context.textStyle.headline6),
+                      const SizedBox(height: 10),
+                      // const EventDetails(),
+                      // const SizedBox(height: 20),
                       const BetFightersV2(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       const BetAmountFormFieldV2(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                     ],
               nextButtons: const [BetContinueButton()],
               onAppbarBackButtonPressed: () {

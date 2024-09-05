@@ -2,6 +2,7 @@ import 'package:bet_pos/bet/presentation/bloc/bet_bloc.dart';
 import 'package:bet_pos/common/component/keyboard/custom_virtual_keyboard.dart';
 import 'package:bet_pos/common/component/textfield/text_field_placeholder.dart';
 import 'package:bet_pos/common/theme/theme.dart';
+import 'package:bet_pos/event/presentation/bloc/current_event_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -40,7 +41,7 @@ class BetAmountFormFieldV2 extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Bet', style: context.textStyle.subtitle1),
+        const _Header(),
         const SizedBox(
           height: 10,
         ),
@@ -52,6 +53,49 @@ class BetAmountFormFieldV2 extends HookWidget {
         ),
         CustomVirtualKeyboard(onKeyPress: (key) => onKeyPress(key)),
       ],
+    );
+  }
+}
+
+class _Header extends HookWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    useEffect(
+      () {
+        final currentEventAndFight =
+            context.read<CurrentEventBloc>().state.currentEventAndFight;
+
+        context.read<BetBloc>().add(
+              BetCurrentEventAndFightAdded(
+                currentEventAndFight,
+              ),
+            );
+        return null;
+      },
+      const [],
+    );
+
+    return BlocBuilder<CurrentEventBloc, CurrentEventState>(
+      builder: (context, state) {
+        final eventName = state.currentEventAndFight.currentEvent.eventName;
+        final fightNumber = state.currentEventAndFight.currentFight.fightNumber;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text('Bet', style: context.textStyle.subtitle1),
+            const SizedBox(width: 8),
+            Text(eventName,
+                style: context.textStyle.subtitle2,
+                overflow: TextOverflow.ellipsis),
+            const SizedBox(width: 8),
+            Text('#$fightNumber',
+                style: context.textStyle.subtitle2,
+                overflow: TextOverflow.ellipsis),
+          ],
+        );
+      },
     );
   }
 }

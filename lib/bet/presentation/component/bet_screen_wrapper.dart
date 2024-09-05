@@ -30,6 +30,7 @@ class BetScreenWrapper extends StatelessWidget {
       child: Scaffold(
         appBar: displayAppBar
             ? MainAppbar(
+              
                 title: appBarTitle,
                 onBackButtonPressed: onAppbarBackButtonPressed,
               )

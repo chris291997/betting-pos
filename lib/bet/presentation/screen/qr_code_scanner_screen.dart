@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-
 class QrCodeScannerScreen extends HookWidget {
   const QrCodeScannerScreen({super.key});
 
@@ -48,15 +47,16 @@ class QrCodeScannerScreen extends HookWidget {
 
                     if (barcode != null) {
                       if ((barcode.rawValue ?? '').isEmpty) return;
-                   
+
                       final transactionId = barcode.rawValue;
-                
+
                       await controller.stop();
-                
+
                       context.read<BetDetailsBloc>().add(
-                            BetDetailsFetchedByTransactionId(transactionId ?? ''),
+                            BetDetailsFetchedByTransactionId(
+                                transactionId ?? ''),
                           );
-                
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (routeContext) {
@@ -107,7 +107,6 @@ class QrCodeScannerScreen extends HookWidget {
   }
 }
 
-
 // class QrCodeScannerScreen extends StatefulHookWidget {
 //   const QrCodeScannerScreen({super.key});
 
@@ -127,11 +126,11 @@ class QrCodeScannerScreen extends HookWidget {
 //     controller.stop();
 //     super.initState();
 //     WidgetsBinding.instance.addObserver(this);
-  
+
 //     _subscription = controller.barcodes.listen(_handleBarcode);
-   
+
 //    controller.start();
-   
+
 //   }
 
 //   @override

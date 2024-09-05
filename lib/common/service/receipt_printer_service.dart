@@ -22,6 +22,7 @@ class ReceiptPrinterService {
     try {
       final profile = await CapabilityProfile.load();
       final generator = Generator(PaperSize.mm80, profile);
+      final isClaimedReceipt = receiptDetails.claimedBy.isNotEmpty;
       List<int> bytes = [];
 
       // Add top padding
@@ -43,36 +44,96 @@ class ReceiptPrinterService {
       // bytes += generator.feed(2);
 
       // Add receipt details
-      bytes +=
-          generator.text('Transaction ID: ${receiptDetails.transactionId}');
-      // bytes += generator.text('Event Name: ${receiptDetails.eventName}');
       // bytes +=
-      //     generator.text('Event Date: ${receiptDetails.eventDate?.toString()}');
-      // bytes += generator.text('Location: ${receiptDetails.location}');
+      //     generator.text('Transaction ID: ${receiptDetails.transactionId}');
+      // // bytes += generator.text('Event Name: ${receiptDetails.eventName}');
+      // // bytes +=
+      // //     generator.text('Event Date: ${receiptDetails.eventDate?.toString()}');
+      // // bytes += generator.text('Location: ${receiptDetails.location}');
 
-      if (receiptDetails.claimedBy.isNotEmpty) {
-        bytes += generator.text('Claimed By: ${receiptDetails.claimedBy}');
-        bytes += generator.text('Claimed At: ${receiptDetails.claimedAt}');
+      // if (receiptDetails.claimedBy.isNotEmpty) {
+      //   bytes += generator.text('Claimed By: ${receiptDetails.claimedBy}');
+      //   bytes += generator.text('Claimed At: ${receiptDetails.claimedAt}');
+      // }
+      // bytes += generator
+      //     .text('Fight Number: ${receiptDetails.fightNumber.toString()}');
+      // bytes += generator.text('Bet On: ${receiptDetails.betOnName}');
+      // bytes +=
+      //     generator.text('Bet Amount: P${receiptDetails.betAmount.toString()}');
+      // if (receiptDetails.claimedBy.isNotEmpty) {
+      //   bytes += generator.text('Winnings: P${receiptDetails.winnings}');
+      // }
+      // // bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
+      // // bytes += generator.text('Cashier: ${receiptDetails.userName}');
+      // bytes += generator.text('CreatedAt: ${receiptDetails.createdAt}');
+      // bytes += generator.feed(2);
+
+      // // Print QR code
+      // bytes +=
+      //     generator.qrcode(receiptDetails.transactionId, size: QRSize.size6);
+
+      // // Add bottom padding
+      // bytes += generator.feed(1);
+
+      bytes += generator.text(
+          isClaimedReceipt
+              ? receiptDetails.claimedAt
+              : receiptDetails.createdAt,
+          styles: const PosStyles(
+            align: PosAlign.center,
+          ));
+
+      bytes += generator.text(
+          'Fight #${receiptDetails.fightNumber.toString()}: ${receiptDetails.betOnName}',
+          styles: const PosStyles(
+            align: PosAlign.left,
+            bold: true,
+            height: PosTextSize.size1,
+            width: PosTextSize.size1,
+          ));
+
+      if (isClaimedReceipt) {
+        bytes += generator.text('Claimed By: ${receiptDetails.claimedBy}',
+            styles: const PosStyles(
+              align: PosAlign.left,
+              bold: true,
+              height: PosTextSize.size1,
+              width: PosTextSize.size1,
+            ));
       }
-      bytes += generator
-          .text('Fight Number: ${receiptDetails.fightNumber.toString()}');
-      bytes += generator.text('Bet On: ${receiptDetails.betOnName}');
-      bytes +=
-          generator.text('Bet Amount: P${receiptDetails.betAmount.toString()}');
-      if (receiptDetails.claimedBy.isNotEmpty) {
-        bytes += generator.text('Winnings: P${receiptDetails.winnings}');
+
+      bytes += generator.text(
+          '${isClaimedReceipt ? 'Bet Amount: ' : ''}P${receiptDetails.betAmount.toString()}',
+          styles: PosStyles(
+            align: PosAlign.left,
+            bold: true,
+            height: isClaimedReceipt ? PosTextSize.size1 : PosTextSize.size2,
+            width: isClaimedReceipt ? PosTextSize.size1 : PosTextSize.size2,
+          ));
+
+      if (isClaimedReceipt) {
+        bytes +=
+            generator.text('Payout: P${receiptDetails.betAmount.toString()}',
+                styles: const PosStyles(
+                  align: PosAlign.left,
+                  bold: true,
+                  height: PosTextSize.size1,
+                  width: PosTextSize.size1,
+                ));
       }
-      // bytes += generator.text('POS Number: ${receiptDetails.posNumber}');
-      // bytes += generator.text('Cashier: ${receiptDetails.userName}');
-      bytes += generator.text('CreatedAt: ${receiptDetails.createdAt}');
-      bytes += generator.feed(2);
 
-      // Print QR code
-      bytes +=
-          generator.qrcode(receiptDetails.transactionId, size: QRSize.size6);
+      bytes += generator.qrcode(receiptDetails.transactionId,
+          size: QRSize.size6, align: PosAlign.left);
 
-      // Add bottom padding
       bytes += generator.feed(1);
+
+      bytes += generator.text(receiptDetails.transactionId,
+          styles: const PosStyles(
+            align: PosAlign.left,
+            bold: true,
+            height: PosTextSize.size1,
+            width: PosTextSize.size1,
+          ));
 
       bytes += generator.cut();
       return bytes;
@@ -95,96 +156,90 @@ class ReceiptPrinterService {
     final fontData =
         await rootBundle.load('assets/fonts/roboto/Roboto-Regular.ttf');
     final ttf = pw.Font.ttf(fontData);
+
     pdf.addPage(
       pw.Page(
         pageFormat: const PdfPageFormat(80 * PdfPageFormat.mm, double.infinity),
         build: (pw.Context context) {
-          // final header = receiptDetails.claimedBy.isEmpty
-          //     ? 'Official Receipt'
-          //     : 'Claimed Receipt';
+          final isClaimedReceipt = receiptDetails.claimedBy.isNotEmpty;
           return pw.Padding(
             padding:
                 const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                // pw.Text(
-                //   header,
-                //   style: pw.TextStyle(
-                //       font: ttf, fontSize: 13, fontWeight: pw.FontWeight.bold),
-                // ),
-                // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Transaction ID: ${receiptDetails.transactionId}',
-                  style: pw.TextStyle(font: ttf, fontSize: 10),
-                ),
-                // pw.SizedBox(height: 10),
-                // pw.Text(
-                //   'Event Name: ${receiptDetails.eventName}',
-                //   style: pw.TextStyle(font: ttf, fontSize: 12),
-                // ),
-                // // pw.SizedBox(height: 10),
-                // pw.Text(
-                //   'Event Date: ${receiptDetails.eventDate}',
-                //   style: pw.TextStyle(font: ttf, fontSize: 12),
-                // ),
-                // pw.SizedBox(height: 10),
-                // pw.Text(
-                //   'Location: ${receiptDetails.location}',
-                //   style: pw.TextStyle(font: ttf, fontSize: 10),
-                // ),
-                // pw.SizedBox(height: 10),
-                if (receiptDetails.claimedBy.isNotEmpty) ...[
-                  pw.Text(
-                    'Claimed By: ${receiptDetails.claimedBy}',
-                    style: pw.TextStyle(font: ttf, fontSize: 10),
+                pw.Container(
+                  alignment: pw.Alignment.center,
+                  child: pw.Text(
+                    isClaimedReceipt
+                        ? receiptDetails.claimedAt
+                        : receiptDetails.createdAt,
+                    style: pw.TextStyle(
+                      font: ttf,
+                      fontSize: 10,
+                    ),
+                    textAlign: pw.TextAlign.center,
                   ),
-                  pw.Text(
-                    'Claimed At: ${receiptDetails.claimedAt}',
-                    style: pw.TextStyle(font: ttf, fontSize: 10),
-                  ),
-                ],
-                pw.Text(
-                  'Fight Number: ${receiptDetails.fightNumber}',
-                  style: pw.TextStyle(font: ttf, fontSize: 10),
-                ),
-                // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Bet On: ${receiptDetails.betOnName}',
-                  style: pw.TextStyle(font: ttf, fontSize: 10),
-                ),
-                // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Bet Amount: ₱${receiptDetails.betAmount}',
-                  style: pw.TextStyle(font: ttf, fontSize: 10),
-                ),
-                if (receiptDetails.claimedBy.isNotEmpty) ...[
-                  pw.Text(
-                    'Winnings: ₱${receiptDetails.winnings}',
-                    style: pw.TextStyle(font: ttf, fontSize: 10),
-                  ),
-                ],
-                // pw.SizedBox(height: 10),
-                // pw.Text(
-                //   'POS Number: ${receiptDetails.posNumber}',
-                //   style: pw.TextStyle(font: ttf, fontSize: 12),
-                // ),
-                // // pw.SizedBox(height: 10),
-                // pw.Text(
-                //   'Cashier: ${receiptDetails.userName}',
-                //   style: pw.TextStyle(font: ttf, fontSize: 12),
-                // ),
-                // pw.SizedBox(height: 10),
-                pw.Text(
-                  'Created At: ${receiptDetails.createdAt}',
-                  style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
                 pw.SizedBox(height: 10),
-                pw.BarcodeWidget(
-                  data: receiptDetails.transactionId,
-                  barcode: pw.Barcode.qrCode(),
-                  width: 200,
-                  height: 80,
+                pw.Text(
+                  'Fight #${receiptDetails.fightNumber.toString()}: ${receiptDetails.betOnName}',
+                  style: pw.TextStyle(
+                    font: ttf,
+                    fontSize: 10,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  textAlign: pw.TextAlign.left,
+                ),
+                pw.SizedBox(height: 10),
+                if (isClaimedReceipt) ...[
+                  pw.Text(
+                    'Claimed By: ${receiptDetails.claimedBy}',
+                    style: pw.TextStyle(
+                      font: ttf,
+                      fontSize: 10,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                    textAlign: pw.TextAlign.left,
+                  ),
+                  pw.SizedBox(height: 10),
+                ],
+                pw.Text(
+                  '${isClaimedReceipt ? 'Bet Amount: ' : ''}₱${receiptDetails.betAmount.toString()}',
+                  style: pw.TextStyle(
+                    font: ttf,
+                    fontSize: isClaimedReceipt ? 10 : 16,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                  textAlign: pw.TextAlign.left,
+                ),
+                pw.SizedBox(height: 10),
+                if (isClaimedReceipt) ...[
+                  pw.Text(
+                    'Payout: ₱${receiptDetails.betAmount}',
+                    style: pw.TextStyle(
+                      font: ttf,
+                      fontSize: isClaimedReceipt ? 10 : 12,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                    textAlign: pw.TextAlign.left,
+                  ),
+                  pw.SizedBox(height: 10),
+                ],
+                pw.Container(
+                  width: double.infinity,
+                  child: pw.BarcodeWidget(
+                    data: receiptDetails.transactionId,
+                    barcode: pw.Barcode.qrCode(),
+                    width: 200,
+                    height: 80,
+                  ),
+                ),
+                pw.SizedBox(height: 10),
+                pw.Text(
+                  receiptDetails.transactionId,
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 10, fontWeight: pw.FontWeight.bold),
                 ),
               ],
             ),
@@ -195,6 +250,112 @@ class ReceiptPrinterService {
 
     return pdf.save();
   }
+
+  // Future<Uint8List> generatePdfPreview() async {
+  //   final pdf = pw.Document();
+  //   final fontData =
+  //       await rootBundle.load('assets/fonts/roboto/Roboto-Regular.ttf');
+  //   final ttf = pw.Font.ttf(fontData);
+  //   pdf.addPage(
+  //     pw.Page(
+  //       pageFormat: const PdfPageFormat(80 * PdfPageFormat.mm, double.infinity),
+  //       build: (pw.Context context) {
+  //         // final header = receiptDetails.claimedBy.isEmpty
+  //         //     ? 'Official Receipt'
+  //         //     : 'Claimed Receipt';
+  //         return pw.Padding(
+  //           padding:
+  //               const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  //           child: pw.Column(
+  //             crossAxisAlignment: pw.CrossAxisAlignment.start,
+  //             children: [
+  //               // pw.Text(
+  //               //   header,
+  //               //   style: pw.TextStyle(
+  //               //       font: ttf, fontSize: 13, fontWeight: pw.FontWeight.bold),
+  //               // ),
+  //               // pw.SizedBox(height: 10),
+  //               pw.Text(
+  //                 'Transaction ID: ${receiptDetails.transactionId}',
+  //                 style: pw.TextStyle(font: ttf, fontSize: 10),
+  //               ),
+  //               // pw.SizedBox(height: 10),
+  //               // pw.Text(
+  //               //   'Event Name: ${receiptDetails.eventName}',
+  //               //   style: pw.TextStyle(font: ttf, fontSize: 12),
+  //               // ),
+  //               // // pw.SizedBox(height: 10),
+  //               // pw.Text(
+  //               //   'Event Date: ${receiptDetails.eventDate}',
+  //               //   style: pw.TextStyle(font: ttf, fontSize: 12),
+  //               // ),
+  //               // pw.SizedBox(height: 10),
+  //               // pw.Text(
+  //               //   'Location: ${receiptDetails.location}',
+  //               //   style: pw.TextStyle(font: ttf, fontSize: 10),
+  //               // ),
+  //               // pw.SizedBox(height: 10),
+  //               if (receiptDetails.claimedBy.isNotEmpty) ...[
+  //                 pw.Text(
+  //                   'Claimed By: ${receiptDetails.claimedBy}',
+  //                   style: pw.TextStyle(font: ttf, fontSize: 10),
+  //                 ),
+  //                 pw.Text(
+  //                   'Claimed At: ${receiptDetails.claimedAt}',
+  //                   style: pw.TextStyle(font: ttf, fontSize: 10),
+  //                 ),
+  //               ],
+  //               pw.Text(
+  //                 'Fight Number: ${receiptDetails.fightNumber}',
+  //                 style: pw.TextStyle(font: ttf, fontSize: 10),
+  //               ),
+  //               // pw.SizedBox(height: 10),
+  //               pw.Text(
+  //                 'Bet On: ${receiptDetails.betOnName}',
+  //                 style: pw.TextStyle(font: ttf, fontSize: 10),
+  //               ),
+  //               // pw.SizedBox(height: 10),
+  //               pw.Text(
+  //                 'Bet Amount: ₱${receiptDetails.betAmount}',
+  //                 style: pw.TextStyle(font: ttf, fontSize: 10),
+  //               ),
+  //               if (receiptDetails.claimedBy.isNotEmpty) ...[
+  //                 pw.Text(
+  //                   'Winnings: ₱${receiptDetails.winnings}',
+  //                   style: pw.TextStyle(font: ttf, fontSize: 10),
+  //                 ),
+  //               ],
+  //               // pw.SizedBox(height: 10),
+  //               // pw.Text(
+  //               //   'POS Number: ${receiptDetails.posNumber}',
+  //               //   style: pw.TextStyle(font: ttf, fontSize: 12),
+  //               // ),
+  //               // // pw.SizedBox(height: 10),
+  //               // pw.Text(
+  //               //   'Cashier: ${receiptDetails.userName}',
+  //               //   style: pw.TextStyle(font: ttf, fontSize: 12),
+  //               // ),
+  //               // pw.SizedBox(height: 10),
+  //               pw.Text(
+  //                 'Created At: ${receiptDetails.createdAt}',
+  //                 style: pw.TextStyle(font: ttf, fontSize: 10),
+  //               ),
+  //               pw.SizedBox(height: 10),
+  //               pw.BarcodeWidget(
+  //                 data: receiptDetails.transactionId,
+  //                 barcode: pw.Barcode.qrCode(),
+  //                 width: 200,
+  //                 height: 80,
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+
+  //   return pdf.save();
+  // }
 
   Future<void> downloadPdf(Uint8List pdfData) async {
     await Printing.sharePdf(bytes: pdfData, filename: 'receipt_preview.pdf');

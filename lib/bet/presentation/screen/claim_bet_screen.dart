@@ -4,12 +4,10 @@ import 'package:bet_pos/bet/presentation/bloc/claim_bet_bloc.dart';
 import 'package:bet_pos/bet/presentation/component/bet_next_step_button.dart';
 import 'package:bet_pos/bet/presentation/component/bet_screen_wrapper.dart';
 import 'package:bet_pos/bet/presentation/component/receipt_details_view.dart';
-import 'package:bet_pos/bet/presentation/screen/receipt_screen.dart';
 import 'package:bet_pos/common/component/button/primary_button.dart';
-import 'package:bet_pos/dashboard/presentation/screen/pos_dashboard.dart';
+import 'package:bet_pos/common/service/receipt_printer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class ClaimBetScreen extends StatelessWidget {
   const ClaimBetScreen({
@@ -55,21 +53,29 @@ class _ClaimBetScreen extends StatelessWidget {
 
           // showSuccessClaimDialog(context);
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ReceiptScreen(
-                betOutput: state.betOutput,
-                onDonePressed: () {
-                  context.go(PosDashboard.routeName);
-                  // Navigator.of(context).popUntil((route) => route.isFirst);
-                },
-              ),
-            ),
-          );
           context.read<ClaimBetBloc>().add(
                 const ClaimBetInitialized(),
               );
+
+          ReceiptPrinterService.of(context, state.betOutput.toReceiptDetails())
+              .printReceiptUsingThermalPrinter();
+
+          // context.go(SearchBetScreen.routeName);
+
+          Navigator.of(context).popUntil((route) => route.isFirst);
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => ReceiptScreen(
+          //       betOutput: state.betOutput,
+          //       onDonePressed: () {
+          //         context.go(PosDashboard.routeName);
+          //         // Navigator.of(context).popUntil((route) => route.isFirst);
+          //       },
+          //     ),
+          //   ),
+          // );
         } else if (state.status.isError) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

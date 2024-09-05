@@ -40,8 +40,8 @@ class _CardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
-      width: 100,
+      height: 75,
+      width: 75,
       child: Center(
         child: Text(
           fighterType.name.toUpperCase(),

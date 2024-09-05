@@ -7,15 +7,15 @@ class PrimarySearchBar extends HookWidget {
     super.key,
     required this.hintText,
     required this.onSearch,
+    required this.searchController,
   });
 
   final String hintText;
   final void Function(String) onSearch;
+  final TextEditingController searchController;
 
   @override
   Widget build(BuildContext context) {
-    final searchController = useTextEditingController();
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
