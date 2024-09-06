@@ -20,7 +20,7 @@ class SelectBetCardV2 extends StatelessWidget {
     return BaseCard(
       onTap: onTap,
       color: fighterType.isMeron
-          ? const Color(0xFF32CD32)
+          ? const Color(0xFF1E90FF)
           : const Color(0xFFFF4500),
       enableGradientBorder: isSelected,
       content: _CardContent(

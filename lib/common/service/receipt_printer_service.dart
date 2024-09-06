@@ -1,3 +1,4 @@
+import 'package:bet_pos/common/helper/extension/data_type.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,7 +104,7 @@ class ReceiptPrinterService {
       }
 
       bytes += generator.text(
-          '${isClaimedReceipt ? 'Bet Amount: ' : ''}P${receiptDetails.betAmount.toString()}',
+          '${isClaimedReceipt ? 'Bet Amount: ' : ''}P${receiptDetails.betAmount.toCurrency()}',
           styles: PosStyles(
             align: PosAlign.left,
             bold: true,
@@ -112,14 +113,21 @@ class ReceiptPrinterService {
           ));
 
       if (isClaimedReceipt) {
-        bytes +=
-            generator.text('Payout: P${receiptDetails.winnings}',
-                styles: const PosStyles(
-                  align: PosAlign.left,
-                  bold: true,
-                  height: PosTextSize.size1,
-                  width: PosTextSize.size1,
-                ));
+        bytes += generator.text('Payout:',
+            styles: const PosStyles(
+              align: PosAlign.left,
+              bold: true,
+              height: PosTextSize.size1,
+              width: PosTextSize.size1,
+            ));
+
+        bytes += generator.text('P${receiptDetails.winnings.toCurrency()}',
+            styles: const PosStyles(
+              align: PosAlign.left,
+              bold: true,
+              height: PosTextSize.size2,
+              width: PosTextSize.size2,
+            ));
       }
 
       bytes += generator.qrcode(receiptDetails.transactionId,
@@ -205,7 +213,7 @@ class ReceiptPrinterService {
                   pw.SizedBox(height: 10),
                 ],
                 pw.Text(
-                  '${isClaimedReceipt ? 'Bet Amount: ' : ''}₱${receiptDetails.betAmount.toString()}',
+                  '${isClaimedReceipt ? 'Bet Amount: ' : ''}₱${receiptDetails.betAmount.toCurrency()}',
                   style: pw.TextStyle(
                     font: ttf,
                     fontSize: isClaimedReceipt ? 10 : 16,
@@ -216,10 +224,20 @@ class ReceiptPrinterService {
                 pw.SizedBox(height: 10),
                 if (isClaimedReceipt) ...[
                   pw.Text(
-                    'Payout: ₱${receiptDetails.winnings}',
+                    'Payout: ₱${receiptDetails.winnings.toCurrency()}',
                     style: pw.TextStyle(
                       font: ttf,
-                      fontSize: isClaimedReceipt ? 10 : 12,
+                      fontSize: 10,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                    textAlign: pw.TextAlign.left,
+                  ),
+                  pw.SizedBox(height: 10),
+                  pw.Text(
+                    '₱${receiptDetails.winnings.toCurrency()}',
+                    style: pw.TextStyle(
+                      font: ttf,
+                      fontSize: 16,
                       fontWeight: pw.FontWeight.bold,
                     ),
                     textAlign: pw.TextAlign.left,
@@ -459,7 +477,7 @@ class ReceiptDetails extends Equatable {
   final String createdAt;
   final String claimedBy;
   final String claimedAt;
-  final String winnings;
+  final double winnings;
 
   ReceiptDetails copyWith({
     double? betAmount,
@@ -475,7 +493,7 @@ class ReceiptDetails extends Equatable {
     String? createdAt,
     String? claimedBy,
     String? claimedAt,
-    String? winnings,
+    double? winnings,
   }) {
     return ReceiptDetails(
       betAmount: betAmount ?? this.betAmount,

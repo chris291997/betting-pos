@@ -71,7 +71,9 @@ class QrCodeScannerScreen extends HookWidget {
                             ),
                           );
                         }),
-                      );
+                      ).then((value) async {
+                        await controller.start();
+                      });
                     }
                   },
                   // overlayBuilder: (context, widget) {

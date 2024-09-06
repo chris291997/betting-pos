@@ -147,7 +147,7 @@ extension BetOutputMapper on BetOutput {
       // betOnName: betOn.name,
       betOnName: betOnType.name.toUpperCase(),
       betAmount: betAmount,
-      winnings: winnings.toString(),
+      winnings: winnings,
       posNumber: pos.posNumber,
       userName: pos.user.username,
       createdAt: createdAtFormatted ?? '',

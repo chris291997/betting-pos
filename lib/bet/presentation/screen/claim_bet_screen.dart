@@ -62,7 +62,8 @@ class _ClaimBetScreen extends StatelessWidget {
 
           // context.go(SearchBetScreen.routeName);
 
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          // Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.pop(context);
 
           // Navigator.push(
           //   context,
@@ -93,56 +94,55 @@ class _ClaimBetScreen extends StatelessWidget {
                 ? PrimaryButtonState.enabled
                 : PrimaryButtonState.disabled;
 
-            return PopScope(
+            return BetScreenWrapper(
               canPop: !status.isSuccess,
-              child: BetScreenWrapper(
-                appBarTitle: 'Claim Bet',
-                contentVerticalAlignment: status.isSuccess
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.center,
-                content: [
-                  if (status.isLoading) ...[
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  ] else if (status.isError) ...[
-                    const Center(
-                      child: Text('No Transaction Found'),
-                    )
-                  ] else if (status.isSuccess) ...[
-                    const ReceiptDetailsView(),
-                  ] else ...[
-                    const Center(
-                      child: Text('No Transaction Requested'),
-                    ),
-                  ]
+              appBarTitle: 'Claim Bet',
+              contentVerticalAlignment: status.isSuccess
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
+              content: [
+                if (status.isLoading) ...[
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                ] else if (status.isError) ...[
+                  const Center(
+                    child: Text('No Transaction Found'),
+                  )
+                ] else if (status.isSuccess) ...[
+                  const ReceiptDetailsView(),
+                ] else ...[
+                  const Center(
+                    child: Text('No Transaction Requested'),
+                  ),
+                ]
+              ],
+              nextButtons: [
+                if (status.isSuccess && state.betOutput.isNotEmpty) ...[
+                  BetNextStepButton(
+                    label: 'Claim${betOutput.isClaimed ? 'ed' : ''}',
+                    onPressed: () {
+                      context.read<ClaimBetBloc>().add(
+                            ClaimBetSubmitted(
+                              transactionId: betOutput.transactionId,
+                            ),
+                          );
+                    },
+                    state: claimState.status.isLoading
+                        ? PrimaryButtonState.loading
+                        : buttonState,
+                  ),
                 ],
-                nextButtons: [
-                  if (status.isSuccess && state.betOutput.isNotEmpty) ...[
-                    BetNextStepButton(
-                      label: 'Claim${betOutput.isClaimed ? 'ed' : ''}',
-                      onPressed: () {
-                        context.read<ClaimBetBloc>().add(
-                              ClaimBetSubmitted(
-                                transactionId: betOutput.transactionId,
-                              ),
-                            );
-                      },
-                      state: claimState.status.isLoading
-                          ? PrimaryButtonState.loading
-                          : buttonState,
-                    ),
-                  ],
-                ],
-                onAppbarBackButtonPressed: () {
-                  if (entryPoint.isSearched) {
-                    Navigator.pop(context);
-                  } else {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  }
-                },
-              ),
+              ],
+              onAppbarBackButtonPressed: () {
+                Navigator.pop(context);
+                // if (entryPoint.isSearched) {
+                //   Navigator.pop(context);
+                // } else {
+                //   Navigator.pop(context);
+                //   Navigator.pop(context);
+                // }
+              },
             );
           },
         );
