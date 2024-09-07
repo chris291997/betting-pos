@@ -13,21 +13,10 @@ class PrintReceiptButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final buttonState = useState(PrimaryButtonState.enabled);
-
     return BetNextStepButton(
       label: 'Use Thermal Printer',
       // state: buttonState.value,
       onPressed: () {
-        // buttonState.value = PrimaryButtonState.loading;
-
-        // await ReceiptPrinterService.of(context, betOutput.toReceiptDetails())
-        //     .printReceiptUsingThermalPrinter()
-        //     .then((_) {
-        //   buttonState.value = PrimaryButtonState.enabled;
-        // }).onError((_, __) {
-        //   buttonState.value = PrimaryButtonState.enabled;
-        // });
         ReceiptPrinterService.of(context, betOutput.toReceiptDetails())
             .printReceiptUsingThermalPrinter();
       },

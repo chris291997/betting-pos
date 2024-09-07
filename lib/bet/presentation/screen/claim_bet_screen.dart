@@ -51,8 +51,6 @@ class _ClaimBetScreen extends StatelessWidget {
                 ),
               );
 
-          // showSuccessClaimDialog(context);
-
           context.read<ClaimBetBloc>().add(
                 const ClaimBetInitialized(),
               );
@@ -60,23 +58,7 @@ class _ClaimBetScreen extends StatelessWidget {
           ReceiptPrinterService.of(context, state.betOutput.toReceiptDetails())
               .printReceiptUsingThermalPrinter();
 
-          // context.go(SearchBetScreen.routeName);
-
-          // Navigator.of(context).popUntil((route) => route.isFirst);
           Navigator.pop(context);
-
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => ReceiptScreen(
-          //       betOutput: state.betOutput,
-          //       onDonePressed: () {
-          //         context.go(PosDashboard.routeName);
-          //         // Navigator.of(context).popUntil((route) => route.isFirst);
-          //       },
-          //     ),
-          //   ),
-          // );
         } else if (state.status.isError) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

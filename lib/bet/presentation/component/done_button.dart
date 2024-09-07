@@ -14,10 +14,6 @@ class DoneButton extends StatelessWidget {
     return BetNextStepButton(
       label: 'Done',
       onPressed: onDonePressed,
-      // onPressed: () {
-      //   // context.go(SelectToBetScreenV2.routeName);
-      //   Navigator.of(context).popUntil((route) => route.isFirst);
-      // },
     );
   }
 }

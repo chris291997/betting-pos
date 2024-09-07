@@ -30,33 +30,6 @@ class BetPaymentDetails extends StatelessWidget {
                 ),
               ],
             ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text('Others', style: context.textStyle.subtitle2),
-            //     Text('0', style: context.textStyle.subtitle2),
-            //   ],
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // const Divider(),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text('Total', style: context.textStyle.subtitle2),
-            //     Text(amount.toString(), style: context.textStyle.subtitle2),
-            //   ],
-            // ),
-            // const SizedBox(
-            //   height: 30,
-            // ),
           ],
         );
       },
