@@ -14,3 +14,4 @@ A new Flutter project.
 - Scan QR Code
 - Claim Winnings
 - Print Claim Receipt
+- No Firebase Credentials
