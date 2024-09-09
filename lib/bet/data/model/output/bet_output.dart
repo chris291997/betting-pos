@@ -98,8 +98,10 @@ class BetOutput extends Equatable {
 
   bool get isNotEmpty => this != const BetOutput.empty();
 
-  bool get isClaimable =>
-      betOn.id == fight.winnerId && winnings > 0 && !isClaimed;
+  // bool get isClaimable =>
+  //     betOn.id == fight.winnerId && winnings > 0 && !isClaimed;
+
+  bool get isClaimable => winnings > 0 && !isClaimed;
 
   FighterType get betOnType =>
       fight.walaId == betOn.id ? FighterType.wala : FighterType.meron;

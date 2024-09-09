@@ -42,11 +42,27 @@ class _CardContent extends StatelessWidget {
     return SizedBox(
       height: 75,
       width: 75,
-      child: Center(
-        child: Text(
-          fighterType.name.toUpperCase(),
-          style: context.textStyle.headline6,
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Use this instead of Autosize or FittedBox to ensure that any character length will have the same font size
+          double? getTextFontSize() {
+            if (constraints.maxWidth < 75 && constraints.maxWidth > 60) {
+              return 18;
+            } else if (constraints.maxWidth <= 60) {
+              return 16;
+            }
+            // return null to use the set or default fontsize
+            return null;
+          }
+
+          return Center(
+            child: Text(
+              fighterType.name.toUpperCase(),
+              style: context.textStyle.headline6
+                  .copyWith(fontSize: getTextFontSize()),
+            ),
+          );
+        },
       ),
     );
   }
